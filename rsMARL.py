@@ -228,11 +228,7 @@ class rsMARL:
             return 0
 
     def getFinalReward(self):
-        res = 0
-        for value in self.goalReached:
-            if value:
-                res += 1
-        return res*100
+        return 100*self.goalReached.count(True)
                 
     def updateQ(self, reward, nextPos, currentPos, action, Qas):
         availablePoses, availableMoves = self.canMove(nextPos[0], nextPos[1])
@@ -252,7 +248,7 @@ class rsMARL:
 
 if __name__ == '__main__':
     epsilon = 0.1
-    gamma = 1
-    alpha = 0.5
+    gamma = 0.9
+    alpha = 0.1
     marl = rsMARL("world.txt", epsilon, gamma, alpha)
     marl.run()
