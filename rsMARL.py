@@ -1,10 +1,12 @@
+from random import random, choice
+
 class rsMARL:
     def __init__(self, filename):
         self.parse(filename)
 
-        '''
+        
         self.goalReached = [False]*len(self.flags)
-
+        '''
 
         self.canMove(0, 0)
         self.canMove(17, 12)
@@ -147,6 +149,36 @@ class rsMARL:
 
     def isInSameRoom(self, coord1, coord2):
         return self.world[coord1[1]][coord1[0]] == self.world[coord2[1]][coord2[0]]
+
+
+    def isDone(self):
+        return self.agent1 == self.goal and self.agent2 == self.goal
+
+
+    def probability(self, p):
+        return random() < p
+
+    def chooseAction(self, x, y):
+        if probability(self.epsilon):
+            return choice(canMove(x, y))
+        else:
+            return computeMax(canMove(x, y))
+
+    def computeMax(self, pos):
+        res = -999999
+
+
+    def run(self):
+        self.Qas = [[0, 0, 0, 0] for i in range(self.size[0])] for j in range(self.size[1])]
+        self.agent1 = self.start[0]
+        self.agent2 = self.start[1]
+
+        while not self.isDone() :
+            action1 = self.chooseAction(self.agent1[0], self.agent1[1])
+
+
+
+
 
 
 if __name__ == '__main__':
