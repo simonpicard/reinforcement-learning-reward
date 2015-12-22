@@ -1,6 +1,8 @@
 class rsMARL:
     def __init__(self, filename):
         self.parse(filename)
+
+        '''
         self.goalReached = [False]*len(self.flags)
 
 
@@ -13,7 +15,7 @@ class rsMARL:
         self.canMove(3, 4)
 
         self.canMove(5, 4)
-        self.canMove(5, 5)
+        self.canMove(5, 5)'''
 
     def canMove(self, x, y):
         availableMoves = []
@@ -48,12 +50,15 @@ class rsMARL:
         del content[0]
         #print(self.size)
 
-        tmp = content[0].strip().replace("\n", "").split(",")
+        tmp = content[0].strip().strip("\n").split(", ")
         for i in range(len(tmp)):
             tmp[i] = tmp[i].split(" ")
         self.goal = list(map(int, tmp[0]))
-        self.start = list(map(int, tmp[1:]))
+        self.start = tmp[1:]
+        for i in range(len(self.start)):
+            self.start[i] = list(map(int, self.start[i]))
         self.nbAgent = len(self.start)
+        #print(self.start)
         del content[0]
         #print(self.goal)
 
@@ -80,6 +85,68 @@ class rsMARL:
             for x in range(int(self.size[0])):
                 self.world[y][x] = content[y][x]
         #print(self.world)
+        del content[:13]
+        print(content)
+        
+        size = int(content[0].strip("\n"))
+        del content[0]
+        self.flagsNames = []
+        for i in range(size):
+            self.flagsNames.append(content[0].strip("\n"))
+            del content[0]
+            
+        size = int(content[0].strip("\n"))
+        del content[0]
+        self.roomsNames = []
+        for i in range(size):
+            self.roomsNames.append(content[0].strip("\n"))
+            del content[0]
+        print(self.flagsNames, self.roomsNames)
+            
+        size = int(content[0].strip("\n"))
+        del content[0]
+        self.plan1Join = []
+        for i in range(size):
+            self.plan1Join.append(content[0].strip("\n").split(" "))
+            del content[0]
+            
+        size = int(content[0].strip("\n"))
+        del content[0]
+        self.plan2Join = []
+        for i in range(size):
+            self.plan2Join.append(content[0].strip("\n").split(" "))
+            del content[0]
+            
+        size = int(content[0].strip("\n"))
+        del content[0]
+        self.plan1Solo = []
+        for i in range(size):
+            self.plan1Solo.append(content[0].strip("\n").split(" "))
+            del content[0]
+            
+        size = int(content[0].strip("\n"))
+        del content[0]
+        self.plan2Solo = []
+        for i in range(size):
+            self.plan2Solo.append(content[0].strip("\n").split(" "))
+            del content[0]
+            
+        self.plan1Join = self.handlePlan(self.plan1Join)
+        self.plan2Join = self.handlePlan(self.plan2Join)
+        self.plan1Solo = self.handlePlan(self.plan1Solo)
+        self.plan2Solo = self.handlePlan(self.plan2Solo)
+
+    def handlePlan(self, plan):
+        for i in range(len(plan)):
+            flags = []
+            room = plan[i][0]
+            room = self.roomsNames.index(room)
+            if len(plan[i]) > 1:
+                flags = plan[i][1:]
+                for j in range(len(flags)):
+                    flags[j] = self.flagsNames.index(flags[j])
+            plan[i] = [room] + flags
+        return plan
 
 
 if __name__ == '__main__':
