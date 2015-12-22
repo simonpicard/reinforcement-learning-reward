@@ -16,32 +16,6 @@ class rsMARL:
 
         self.canMove(5, 4)
         self.canMove(5, 5)'''
-
-    def canMove(self, x, y):
-        availableMoves = []
-        move = [-1, 1]
-        for shift in move:
-            for shiftType in [0, 1]:
-
-                if shiftType == 0: # shift on y
-                    tmp = [x, y+shift]
-                else: # shift on x
-                    tmp = [x+shift, y]
-
-                if (0 <= tmp[0] and tmp[0] < self.size[0]) and (0 <= tmp[1] and tmp[1] < self.size[1]): #Is in World
-                    if self.isInSameRoom([x, y], tmp):
-                        availableMoves.append(tmp)
-                    elif self.hasDoor([x, y], tmp):
-                        availableMoves.append(tmp)
-
-        print(x, y, availableMoves)
-        return availableMoves
-
-    def hasDoor(self, coord1, coord2):
-        return (coord1+coord2) in self.doors or (coord2+coord1) in self.doors
-
-    def isInSameRoom(self, coord1, coord2):
-        return self.world[coord1[1]][coord1[0]] == self.world[coord2[1]][coord2[0]]
     
     def parse(self, filename):
         file = open(filename)
@@ -147,6 +121,32 @@ class rsMARL:
                     flags[j] = self.flagsNames.index(flags[j])
             plan[i] = [room] + flags
         return plan
+
+    def canMove(self, x, y):
+        availableMoves = []
+        move = [-1, 1]
+        for shift in move:
+            for shiftType in [0, 1]:
+
+                if shiftType == 0: # shift on y
+                    tmp = [x, y+shift]
+                else: # shift on x
+                    tmp = [x+shift, y]
+
+                if (0 <= tmp[0] and tmp[0] < self.size[0]) and (0 <= tmp[1] and tmp[1] < self.size[1]): #Is in World
+                    if self.isInSameRoom([x, y], tmp):
+                        availableMoves.append(tmp)
+                    elif self.hasDoor([x, y], tmp):
+                        availableMoves.append(tmp)
+
+        print(x, y, availableMoves)
+        return availableMoves
+
+    def hasDoor(self, coord1, coord2):
+        return (coord1+coord2) in self.doors or (coord2+coord1) in self.doors
+
+    def isInSameRoom(self, coord1, coord2):
+        return self.world[coord1[1]][coord1[0]] == self.world[coord2[1]][coord2[0]]
 
 
 if __name__ == '__main__':
