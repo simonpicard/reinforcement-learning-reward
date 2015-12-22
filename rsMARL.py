@@ -182,4 +182,4 @@ class rsMARL:
 
 
 if __name__ == '__main__':
-    marl = rsMARL("world")
+    marl = rsMARL("world.txt")
