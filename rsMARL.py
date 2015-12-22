@@ -4,7 +4,7 @@ class rsMARL:
     def __init__(self, filename):
         self.parse(filename)
 
-        
+        self.moves = [[1, 0], [-1, 0], [0, 1], [0, -1]]
         self.goalReached = [False]*len(self.flags)
         '''
 
@@ -125,24 +125,19 @@ class rsMARL:
         return plan
 
     def canMove(self, x, y):
+        availablePoses = []
         availableMoves = []
-        move = [-1, 1]
-        for shift in move:
-            for shiftType in [0, 1]:
-
-                if shiftType == 0: # shift on y
-                    tmp = [x, y+shift]
-                else: # shift on x
-                    tmp = [x+shift, y]
-
-                if (0 <= tmp[0] and tmp[0] < self.size[0]) and (0 <= tmp[1] and tmp[1] < self.size[1]): #Is in World
-                    if self.isInSameRoom([x, y], tmp):
-                        availableMoves.append(tmp)
-                    elif self.hasDoor([x, y], tmp):
-                        availableMoves.append(tmp)
-
-        print(x, y, availableMoves)
-        return availableMoves
+        potentialPoses = [[x+1, y], [x-1, y], [x, y+1], [x, y-1]]
+        potentialMoves = range(4)
+        for i in range(len(potentialPoses)):
+            if potentialPoses[i][0] >= 0 and potentialPoses[i][1] >= 0 and potentialPoses[i][0] < self.size[0] and potentialPoses[i][1] < self.size[1]:
+                if self.isInSameRoom([x, y], potentialPoses[i]):
+                    availableMoves.append(potentialMoves[i])
+                    availablePoses.append(potentialPoses[i])
+                if self.hasDoor([x, y], potentialPoses[i]):
+                    availableMoves.append(potentialMoves[i])
+                    availablePoses.append(potentialPoses[i])
+        return availablePoses, availableMoves
 
     def hasDoor(self, coord1, coord2):
         return (coord1+coord2) in self.doors or (coord2+coord1) in self.doors
@@ -155,19 +150,6 @@ class rsMARL:
         return self.agent1 == self.goal and self.agent2 == self.goal
 
 
-    def probability(self, p):
-        return random() < p
-
-    def chooseAction(self, x, y):
-        if probability(self.epsilon):
-            return choice(canMove(x, y))
-        else:
-            return computeMax(canMove(x, y))
-
-    def computeMax(self, pos):
-        res = -999999
-
-
     def run(self):
         self.Qas = [[0, 0, 0, 0] for i in range(self.size[0])] for j in range(self.size[1])]
         self.agent1 = self.start[0]
@@ -175,6 +157,57 @@ class rsMARL:
 
         while not self.isDone() :
             action1 = self.chooseAction(self.agent1[0], self.agent1[1])
+            nextPos1 = self.getNextPos(x, y, action1)
+            reward1 = self.getReward(nextPos1)
+            self.updateQ(reward1, nextPos1, self.agent1, action1)
+            self.agent1 = nextPos1
+
+
+    def probability(self, p):
+        return random() < p
+
+    def chooseAction(self, x, y):
+        availablePoses, availableMoves = canMove(x, y)
+        if probability(self.epsilon):
+            return choice(availableMoves)
+        else:
+            maxValue, moves = computeMax(x, y, availableMoves)
+            return choice(moves)
+
+    def computeMax(self, pos):
+        res = -9999999999999999999
+        best = []
+        for i in range(len(4)):
+            current = self.Qas[pos[0]][pos[1]][i]
+            if current > res:
+                res = current
+                best = [i]
+            elif current == res:
+                best.append(i)
+        return res, best
+
+    def getNextPos(self, x, y, move):
+        return [pos[0] + self.moves[move][0], pos[1] + self.moves[move][1]]
+
+    def getReward(self, nextPos):
+        if nextPos == self.goal:
+            return self.getFinalReward()
+        else:
+            return 0
+
+    def getFinalReward(self):
+        res = 0
+        for value in self.goalReached:
+            if value:
+                res += 1
+        return res*100
+                
+    def updateQ(self, reward, nextPos, currentPos, action):
+        availablePoses, availableMoves = canMove(nextPos[0], nextPos[1])
+        maxA, moves = computeMax(nextPos[0], nextPos[1], availableMoves)
+        originalQ = self.Qas[currentPos[0]][currentPos[1]][action]
+        self.Qas[currentPos[0]][currentPos[1]][action] =\
+            originalQ + self.alpha*(reward + self.gamma*maxA-originalQ)
 
 
 
