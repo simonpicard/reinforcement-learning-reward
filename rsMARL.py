@@ -1,5 +1,7 @@
 class rsMARL:
-	def __init__(self):
+	def __init__(self, filename):
+                self.parse(filename)
+                self.goalReached = [False]*len(self.flags)
 		pass
 	
 	def parse(self, filename):
@@ -9,7 +11,12 @@ class rsMARL:
 		del content[0]
 		print(self.size)
 
-		self.goal = content[0].strip().replace("\n", "").split(" ")
+		tmp = content[0].strip().replace("\n", "").split(",")
+		for i in range(len(tmp)):
+                        tmp[i] = tmp[i].split(" ")
+                self.goal = tmp[0]
+                self.start = tmp[1:]
+                self.nbAgent = len(self.start)
 		del content[0]
 
 		print(self.goal)
@@ -41,6 +48,6 @@ class rsMARL:
 
 		print(self.world)
 
+
 if __name__ == '__main__':
-	marl = rsMARL()
-	marl.parse("world")
+	marl = rsMARL("world")
