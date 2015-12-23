@@ -1,4 +1,5 @@
 from random import random, choice
+import copy
 
 shapeDic = {"None":0, "Flag":1, "Solo":2, "Join":3, "Flag+Solo":4, "Flag+Join":5}
 
@@ -50,7 +51,7 @@ class rsMARL:
         # Doors
         tmp = content[0].strip().replace("\n", "").split(", ")
 
-        self.doors = [[0, 0, 0, 0] for i in range(len(tmp))]
+        self.doors = [[] for i in range(len(tmp))]
         for i in range(len(tmp)):
             self.doors[i] = list(map(int, tmp[i].split(" "))) #Convert list str into list int
         del content[0]
@@ -133,7 +134,7 @@ class rsMARL:
             plan[i] = [room] + flags
         return plan
 
-    def canMove(self, x, y):
+    def canMove(self, x, y, agent):
         availablePoses = []
         availableMoves = []
         potentialPoses = [[x+1, y], [x-1, y], [x, y+1], [x, y-1]]
@@ -145,17 +146,27 @@ class rsMARL:
                 if self.isInSameRoom([x, y], potentialPoses[i]):
                     availableMoves.append(potentialMoves[i])
                     availablePoses.append(potentialPoses[i])
+
                 elif self.hasDoor([x, y], potentialPoses[i]):
                     availableMoves.append(potentialMoves[i])
                     availablePoses.append(potentialPoses[i])
 
-        if self.agent1 in availablePoses and self.agent1!=self.goal:
+
+        if agent == 2 and self.agent1 in availablePoses and self.agent1!=self.goal:
             availableMoves.pop(availablePoses.index(self.agent1))
-            availablePoses.remove(self.agent1)
-        if self.agent2 in availablePoses and self.agent2!=self.goal:
+            availablePoses.pop(availablePoses.index(self.agent1))
+        elif agent == 1 and self.agent2 in availablePoses and self.agent2!=self.goal:
             availableMoves.pop(availablePoses.index(self.agent2))
-            availablePoses.remove(self.agent2)
-        return availablePoses, availableMoves
+            availablePoses.pop(availablePoses.index(self.agent2))
+
+        if len(availableMoves) == 0:
+            print("salut")
+            print(availableMoves)
+            print(x, y)
+            print(self.agent1)
+            print(self.agent2)
+
+        return availableMoves
 
     def hasDoor(self, coord1, coord2):
         return (coord1+coord2) in self.doors or (coord2+coord1) in self.doors
@@ -172,10 +183,14 @@ class rsMARL:
         self.agent1 = self.start[0]
         self.agent2 = self.start[1]
         self.goalReached = [False]*len(self.flags)
+        self.goalReached1 = [False]*len(self.flags)
+        self.goalReached2 = [False]*len(self.flags)
 
     def run(self):
         Qas1 = [[[0, 0, 0, 0] for i in range(self.size[1])] for j in range(self.size[0])]
         Qas2 = [[[0, 0, 0, 0] for i in range(self.size[1])] for j in range(self.size[0])]
+
+        
 
         for run in range(1000):
             self.reset()
@@ -184,38 +199,49 @@ class rsMARL:
             eTrace2 = [[[0, 0, 0, 0] for i in range(self.size[1])] for j in range(self.size[0])]
             sigma1 = None
             sigma2 = None
+            action1 = choice(self.canMove(self.agent1[0], self.agent1[1], 1))
+            action2 = choice(self.canMove(self.agent2[0], self.agent2[1], 2))
+            Qas1tmp = copy.deepcopy(Qas1)
+            Qas2tmp = copy.deepcopy(Qas2)
             while not self.isDone() :
                 step += 1
+
                 if self.agent1 != self.goal:
-                    self.agent1, Qas1, eTrace1 = self.runAgent(self.agent1, Qas1, eTrace1)
+                    self.agent1, Qas1tmp, eTrace1, action1 = self.runAgent(self.agent1, Qas1tmp, Qas1tmp, eTrace1, action1, 1)
 
                 if self.agent2 != self.goal:
-                    self.agent2, Qas2, eTrace2 = self.runAgent(self.agent2, Qas2, eTrace2)
+                    self.agent2, Qas2tmp, eTrace2, action2 = self.runAgent(self.agent2, Qas2tmp, Qas2tmp, eTrace2, action2, 2)
 
                 if step%100 == 0:
                     print(step, self.agent1!= self.goal, self.agent2 != self.goal)
+                #print (self.agent2)
+
+            Qas1 = copy.deepcopy(Qas1tmp)
+            Qas2 = copy.deepcopy(Qas2tmp)
+            # print(Qas2)
+
+            # raw_input()
             self.totalReward += self.getFinalReward()
             print (run, step, self.goalReached.count(True), int(self.totalReward/(run+1)))
 
-    def runAgent(self, pos, Qas, eTrace):
-        action = self.chooseAction(pos[0], pos[1], Qas)
+    def runAgent(self, pos, Qas, Qastmp, eTrace, action, agent):
+        #action = self.chooseAction(pos[0], pos[1], Qas)
         nextPos = self.getNextPos(pos[0], pos[1], action)
         reward = self.getReward(nextPos)
 
-        sigma = self.updateSigma(reward, nextPos, pos, action, Qas)
+        sigma, nextAction = self.getSigma(reward, nextPos, pos, action, Qas, agent)
         eTrace[pos[0]][pos[1]][action] += 1
-        eTrace, Qas = self.updateEligibilityTrace(eTrace, sigma, Qas)
+        eTrace, Qastmp = self.updateEligibilityTrace(eTrace, sigma, Qastmp)
 
-        self.checkFlags(nextPos)
-
-        return nextPos, Qas, eTrace
+        self.checkFlags(nextPos, agent)
+        return nextPos, Qastmp, eTrace, nextAction
 
 
     def probability(self, p):
         return random() < p
 
-    def chooseAction(self, x, y, Qas):
-        availablePoses, availableMoves = self.canMove(x, y)
+    def chooseAction(self, x, y, Qas, agent):
+        availableMoves = self.canMove(x, y, agent)
         if self.probability(self.epsilon):
             return choice(availableMoves)
         else:
@@ -250,42 +276,49 @@ class rsMARL:
         for x in range(len(Qas)):
             for y in range(len(Qas[x])):
                 for a in range(len(Qas[x][y])):
-                    Qas[x][y][a] += self.alpha*sigma*eTrace[x][y][a]
+                    Qas[x][y][a] += self.alpha * sigma * eTrace[x][y][a]
                     eTrace[x][y][a] *= self.gamma * self.lambd
         return eTrace, Qas
         
                 
-    def updateSigma(self, reward, nextPos, currentPos, action, Qas):
-        availablePoses, availableMoves = self.canMove(nextPos[0], nextPos[1])
-        maxA, moves = self.computeMax(nextPos[0], nextPos[1], availableMoves, Qas)
+    def getSigma(self, reward, nextPos, currentPos, action, Qas, agent):
+        nextAction = self.chooseAction(nextPos[0], nextPos[1], Qas, agent)
         originalQ = Qas[currentPos[0]][currentPos[1]][action]
+        nextQ = Qas[nextPos[0]][nextPos[1]][nextAction]
         sigma = \
-            reward + self.gamma*maxA-originalQ + self.rewardShaping(currentPos, nextPos)
+            reward + (self.gamma*nextQ) - originalQ + self.rewardShaping(currentPos, nextPos, agent)
 
-        return sigma
+        return sigma, nextAction
 
 
-    def checkFlags(self, pos):
+    def checkFlags(self, pos, agent):
         if pos in self.flags:
             self.goalReached[self.flags.index(pos)] = True
+            if agent == 1 :
+                self.goalReached1[self.flags.index(pos)] = True
+            else:
+                self.goalReached2[self.flags.index(pos)] = True
 
 
-    def testFlags(self, pos):
-        tmp = list(self.goalReached)
+    def testFlags(self, pos, agent):
+        if agent == 1:
+            tmp = list(self.goalReached1)
+        if agent == 2:
+            tmp = list(self.goalReached2)
         if pos in self.flags:
             tmp[self.flags.index(pos)] = True
         return tmp.count(True)
 
-    def rewardShaping(self, currentPos, nextPos):
-        return self.gamma*self.phi(nextPos)-self.phi(currentPos)
+    def rewardShaping(self, currentPos, nextPos, agent):
+        return self.gamma*self.phi(nextPos, agent)-self.phi(currentPos, agent)
 
-    def phi(self, pos):
+    def phi(self, pos, agent):
         if self.shape == "None":
             return 0
         elif self.shape == "Flags":
             #omega = len(self.flags)*100.0/len(self.flags)
             omega = 100
-            return omega*self.testFlags(pos)
+            return omega*self.testFlags(pos, agent)
         #elif self.shape = "Solo":
             
             
@@ -298,5 +331,5 @@ if __name__ == '__main__':
     gamma = 0.99
     alpha = 0.1
     lambd = 0.4
-    marl = rsMARL("world.txt", epsilon, gamma, alpha, "None", lambd)
+    marl = rsMARL("world.txt", epsilon, gamma, alpha, "Flags", lambd)
     marl.run()
