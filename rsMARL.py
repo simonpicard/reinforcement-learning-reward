@@ -13,21 +13,20 @@ class rsMARL:
         self.alpha = alpha
         self.lambd = lambd
 
-        self.moves = [[1, 0], [-1, 0], [0, 1], [0, -1]]
+        self.moves = [[0, -1], [1, 0], [0, 1], [-1, 0]] #x y N E S O
         self.totalReward = 0
-        
-        '''
 
-        self.canMove(0, 0)
-        self.canMove(17, 12)
-
-        self.canMove(5, 3)
-        self.canMove(4, 3)
-        self.canMove(4, 4)
-        self.canMove(3, 4)
-
-        self.canMove(5, 4)
-        self.canMove(5, 5)'''
+        """
+        size = width, height
+        start = x, y
+        goal = x, y
+        doors = x, y
+        flags = x, y
+        world[y][x]
+        agents = x, y
+        Qas[y][x]
+        eTrace[y][x]
+        """
     
     def parse(self, filename):
         file = open(filename)
@@ -137,7 +136,7 @@ class rsMARL:
     def canMove(self, x, y, agent):
         availablePoses = []
         availableMoves = []
-        potentialPoses = [[x+1, y], [x-1, y], [x, y+1], [x, y-1]]
+        potentialPoses = [[x+self.moves[i][0], y+self.moves[i][1]] for i in range(4)]
         potentialMoves = range(4)
 
         for i in range(len(potentialPoses)):
@@ -151,20 +150,14 @@ class rsMARL:
                     availableMoves.append(potentialMoves[i])
                     availablePoses.append(potentialPoses[i])
 
-
+        """
         if agent == 2 and self.agent1 in availablePoses and self.agent1!=self.goal:
             availableMoves.pop(availablePoses.index(self.agent1))
             availablePoses.pop(availablePoses.index(self.agent1))
         elif agent == 1 and self.agent2 in availablePoses and self.agent2!=self.goal:
             availableMoves.pop(availablePoses.index(self.agent2))
             availablePoses.pop(availablePoses.index(self.agent2))
-
-        if len(availableMoves) == 0:
-            print("salut")
-            print(availableMoves)
-            print(x, y)
-            print(self.agent1)
-            print(self.agent2)
+        """
 
         return availableMoves
 
@@ -187,54 +180,66 @@ class rsMARL:
         self.goalReached2 = [False]*len(self.flags)
 
     def run(self):
-        Qas1 = [[[0, 0, 0, 0] for i in range(self.size[1])] for j in range(self.size[0])]
-        Qas2 = [[[0, 0, 0, 0] for i in range(self.size[1])] for j in range(self.size[0])]
-
+        Qas1 = [[[0, 0, 0, 0] for i in range(self.size[0])] for j in range(self.size[1])]
+        Qas2 = [[[0, 0, 0, 0] for i in range(self.size[0])] for j in range(self.size[1])]
+        z = False
         
 
         for run in range(1000):
             self.reset()
             step = 0
-            eTrace1 = [[[0, 0, 0, 0] for i in range(self.size[1])] for j in range(self.size[0])]
-            eTrace2 = [[[0, 0, 0, 0] for i in range(self.size[1])] for j in range(self.size[0])]
+            eTrace1 = [[[0, 0, 0, 0] for i in range(self.size[0])] for j in range(self.size[1])]
+            eTrace2 = [[[0, 0, 0, 0] for i in range(self.size[0])] for j in range(self.size[1])]
             sigma1 = None
             sigma2 = None
             action1 = choice(self.canMove(self.agent1[0], self.agent1[1], 1))
             action2 = choice(self.canMove(self.agent2[0], self.agent2[1], 2))
-            Qas1tmp = copy.deepcopy(Qas1)
-            Qas2tmp = copy.deepcopy(Qas2)
             while not self.isDone() :
                 step += 1
 
                 if self.agent1 != self.goal:
-                    self.agent1, Qas1tmp, eTrace1, action1 = self.runAgent(self.agent1, Qas1tmp, Qas1tmp, eTrace1, action1, 1)
+                    self.agent1, Qas1, eTrace1, action1 = self.runAgent(self.agent1, Qas1, eTrace1, action1, 1)
 
                 if self.agent2 != self.goal:
-                    self.agent2, Qas2tmp, eTrace2, action2 = self.runAgent(self.agent2, Qas2tmp, Qas2tmp, eTrace2, action2, 2)
+                    self.agent2, Qas2, eTrace2, action2 = self.runAgent(self.agent2, Qas2, eTrace2, action2, 2)
 
                 if step%100 == 0:
                     print(step, self.agent1!= self.goal, self.agent2 != self.goal)
                 #print (self.agent2)
+                if step > 10000 and not z:
+                    a = input("What to do")
+                    if a == "e":
+                        z = True
+                        pass
+                    else:
+                        print("ok")
+                        if self.agent1 != self.goal:
+                            print(self.agent1)
+                            for i in range(len(Qas1)):
+                                for j in range(len(Qas1[i])):
+                                    print(list(map(int, Qas1[i][j])), end= " ")
+                                print("")
+                        if self.agent2 != self.goal:
+                            print(self.agent2)
+                            for i in range(len(Qas2)):
+                                for j in range(len(Qas2[i])):
+                                    print(list(map(int, Qas2[i][j])), end= " ")
+                                print("")
 
-            Qas1 = copy.deepcopy(Qas1tmp)
-            Qas2 = copy.deepcopy(Qas2tmp)
-            # print(Qas2)
-
-            # raw_input()
             self.totalReward += self.getFinalReward()
             print (run, step, self.goalReached.count(True), int(self.totalReward/(run+1)))
 
-    def runAgent(self, pos, Qas, Qastmp, eTrace, action, agent):
+    def runAgent(self, pos, Qas, eTrace, action, agent):
         #action = self.chooseAction(pos[0], pos[1], Qas)
         nextPos = self.getNextPos(pos[0], pos[1], action)
         reward = self.getReward(nextPos)
 
         sigma, nextAction = self.getSigma(reward, nextPos, pos, action, Qas, agent)
-        eTrace[pos[0]][pos[1]][action] += 1
-        eTrace, Qastmp = self.updateEligibilityTrace(eTrace, sigma, Qastmp)
+        eTrace[pos[1]][pos[0]][action] += 1
+        eTrace, Qas = self.updateEligibilityTrace(eTrace, sigma, Qas)
 
         self.checkFlags(nextPos, agent)
-        return nextPos, Qastmp, eTrace, nextAction
+        return nextPos, Qas, eTrace, nextAction
 
 
     def probability(self, p):
@@ -252,7 +257,7 @@ class rsMARL:
         res = -9999999999999999999
         best = []
         for i in range(len(pos)):
-            current = Qas[x][y][pos[i]]
+            current = Qas[y][x][pos[i]]
             if current > res:
                 res = current
                 best = [pos[i]]
@@ -273,18 +278,18 @@ class rsMARL:
         return 100*self.goalReached.count(True)
 
     def updateEligibilityTrace(self, eTrace, sigma, Qas):
-        for x in range(len(Qas)):
-            for y in range(len(Qas[x])):
-                for a in range(len(Qas[x][y])):
-                    Qas[x][y][a] += self.alpha * sigma * eTrace[x][y][a]
-                    eTrace[x][y][a] *= self.gamma * self.lambd
+        for y in range(len(Qas)):
+            for x in range(len(Qas[y])):
+                for a in range(len(Qas[y][x])):
+                    Qas[y][x][a] += self.alpha * sigma * eTrace[y][x][a]
+                    eTrace[y][x][a] *= self.gamma * self.lambd
         return eTrace, Qas
         
                 
     def getSigma(self, reward, nextPos, currentPos, action, Qas, agent):
         nextAction = self.chooseAction(nextPos[0], nextPos[1], Qas, agent)
-        originalQ = Qas[currentPos[0]][currentPos[1]][action]
-        nextQ = Qas[nextPos[0]][nextPos[1]][nextAction]
+        originalQ = Qas[currentPos[1]][currentPos[0]][action]
+        nextQ = Qas[nextPos[1]][nextPos[0]][nextAction]
         sigma = \
             reward + (self.gamma*nextQ) - originalQ + self.rewardShaping(currentPos, nextPos, agent)
 
@@ -328,7 +333,7 @@ class rsMARL:
 
 if __name__ == '__main__':
     epsilon = 0.1
-    gamma = 0.99
+    gamma = 0.8
     alpha = 0.1
     lambd = 0.4
     marl = rsMARL("world.txt", epsilon, gamma, alpha, "Flags", lambd)
