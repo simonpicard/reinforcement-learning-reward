@@ -40,7 +40,7 @@ class rsMARL:
 
     def flagsIndex(self, flags):
         res = 0
-        for i in rangel(len(flags)):
+        for i in range(len(flags)):
             if flags[i]:
                 res += 2**i 
         return res
@@ -63,11 +63,10 @@ class rsMARL:
         self.firstDone = None
 
     def run(self):
-        Qas1 = [[[[0.0, 0.0, 0.0, 0.0] for i in range(self.world.size[0])] for j in range(self.world.size[1])] for k in range(2**6)]
-        Qas2 = [[[[0.0, 0.0, 0.0, 0.0] for i in range(self.world.size[0])] for j in range(self.world.size[1])] for k in range(2**6)]
+        Qas1 = [[[[0.0, 0.0, 0.0, 0.0] for k in range(2**6)] for i in range(self.world.size[0])] for j in range(self.world.size[1])]
+        Qas2 = [[[[0.0, 0.0, 0.0, 0.0] for k in range(2**6)] for i in range(self.world.size[0])] for j in range(self.world.size[1])]
         z = False
         
-
         for run in range(1000):
             self.reset()
             step = 0
@@ -83,48 +82,48 @@ class rsMARL:
                 step += 1
 
                 if not self.world.isOnGoal(self.agent1) and not done1:
-                    path1.append(self.agent1)
                     flagIndex1 = self.flagsIndex(self.goalReached1)
-                    self.agent1, Qas1, eTrace1, action1, p1, done1 = self.runAgent(self.agent1, Qas1, path1, action1, 1, flagIndex1)
+                    path1.append([self.agent1, action1, flagIndex1])
+                    self.agent1, Qas1, action1, p1, done1 = self.runAgent(self.agent1, Qas1, path1, action1, 1, flagIndex1)
 
                 if not self.world.isOnGoal(self.agent2) and not done2:
-                    path2.append(self.agent2)
-                    flagIndex2 = self.flagsIndex(self.goalReached1)
-                    self.agent2, Qas2, eTrace2, action2, p2, done2 = self.runAgent(self.agent2, Qas2, eTrace2, action2, 2, flagIndex1)
+                    flagIndex2 = self.flagsIndex(self.goalReached2)
+                    path2.append([self.agent2, action2, flagIndex2])
+                    self.agent2, Qas2, action2, p2, done2 = self.runAgent(self.agent2, Qas2, path2, action2, 2, flagIndex2)
 
                 if done1 and done2:
                     #print("okFinis")
                     if self.firstDone == 1:
-                        self.agent1, Qas1, eTrace1, action1, p1, done1 = self.finishEpisode(self.agent1, Qas1, eTrace1, action1, 1)
+                        self.agent1, Qas1, action1, p1, done1 = self.finishEpisode(self.agent1, Qas1, path1, action1, 1, flagIndex1)
                     else:
-                        self.agent2, Qas2, eTrace2, action2, p2, done2 = self.finishEpisode(self.agent2, Qas2, eTrace2, action2, 2)
+                        self.agent2, Qas2, action2, p2, done2 = self.finishEpisode(self.agent2, Qas2, path2, action2, 2, flagIndex2)
 
 
-                if step%100 == 0:
-                    if self.shape == "Solo" or self.shape == "Join":
-                        print(step, self.world.isOnGoal(self.agent1), self.world.isOnGoal(self.agent2), self.getStepPlan(1, self.agent1, self.shape), self.getStepPlan(2, self.agent2, self.shape))
-                    else:
-                        print(step, done1, done2)
-                #print (self.agent2)
-                if step > 10000 and not z:
-                    a = input("What to do")
-                    if a == "e":
-                        z = True
-                        pass
-                    else:
-                        print("ok")
-                        if not self.world.isOnGoal(self.agent1):
-                            print(self.agent1, self.world.canMove(self.agent1), Qas1[self.agent1[1]][self.agent1[0]], action1, p1, self.testFlags([0,0],1))
-                            for i in range(len(Qas1)):
-                                for j in range(len(Qas1[i])):
-                                    print(list(map(int, Qas1[i][j])), end= " ")
-                                print("")
-                        if not self.world.isOnGoal(self.agent2):
-                            print(self.agent2, self.world.canMove(self.agent2), Qas2[self.agent2[1]][self.agent2[0]], action2, p2, self.testFlags([0,0],2))
-                            for i in range(len(Qas2)):
-                                for j in range(len(Qas2[i])):
-                                    print(list(map(int, Qas2[i][j])), end= " ")
-                                print("")
+                # if step%100 == 0:
+                #     if self.shape == "Solo" or self.shape == "Join":
+                #         print(step, self.world.isOnGoal(self.agent1), self.world.isOnGoal(self.agent2), self.getStepPlan(1, self.agent1, self.shape), self.getStepPlan(2, self.agent2, self.shape))
+                #     else:
+                #         print(step, done1, done2)
+                # #print (self.agent2)
+                # if step > 10000 and not z:
+                #     a = input("What to do")
+                #     if a == "e":
+                #         z = True
+                #         pass
+                #     else:
+                #         print("ok")
+                #         if not self.world.isOnGoal(self.agent1):
+                #             print(self.agent1, self.world.canMove(self.agent1), Qas1[self.agent1[1]][self.agent1[0]], action1, p1, self.testFlags([0,0],1))
+                #             for i in range(len(Qas1)):
+                #                 for j in range(len(Qas1[i])):
+                #                     print(list(map(int, Qas1[i][j])), end= " ")
+                #                 print("")
+                #         if not self.world.isOnGoal(self.agent2):
+                #             print(self.agent2, self.world.canMove(self.agent2), Qas2[self.agent2[1]][self.agent2[0]], action2, p2, self.testFlags([0,0],2))
+                #             for i in range(len(Qas2)):
+                #                 for j in range(len(Qas2[i])):
+                #                     print(list(map(int, Qas2[i][j])), end= " ")
+                #                 print("")
 
             self.totalReward += self.getFinalReward()
             print (run, step, self.goalReached.count(True), int(self.totalReward/(run+1)))
@@ -138,7 +137,7 @@ class rsMARL:
         if self.world.isOnGoal(nextPos):
             if self.firstDone == None:
                 self.firstDone = agent
-                return pos, Qas, eTrace, action, "", True
+                return pos, Qas, action, "", True
             else:
                 done = True
         reward = self.getReward(nextPos)
@@ -146,14 +145,14 @@ class rsMARL:
         #if not self.world.isOnGoal(pos):
         #    reward = 0
 
-        sigma, nextAction, p = self.getSigma(reward, nextPos, pos, action, Qas[flagIndex], agent)
+        sigma, nextAction, p = self.getSigma(reward, nextPos, pos, action, Qas, agent, flagIndex)
         path.append((pos, action, flagIndex))
-        eTrace, Qas = self.updateEligibilityTrace(path, sigma, Qas)
+        Qas = self.updateEligibilityTrace(path, sigma, Qas)
 
         self.checkFlags(nextPos, agent)
-        return nextPos, Qas, eTrace, nextAction, p, done
+        return nextPos, Qas, nextAction, p, done
 
-    def finishEpisode(self, pos, Qas, eTrace, action, agent):
+    def finishEpisode(self, pos, Qas, path, action, agent, flagIndex):
         #action = self.chooseAction(pos[0], pos[1], Qas)
         nextPos = self.getNextPos(pos[0], pos[1], action)
         reward = self.getReward(nextPos)
@@ -161,32 +160,31 @@ class rsMARL:
         #if not self.world.isOnGoal(pos):
         #    reward = 0
 
-        sigma, nextAction, p = self.getSigma(reward, nextPos, pos, action, Qas, agent)
-        eTrace[pos[1]][pos[0]][action] = 1
-        eTrace, Qas = self.updateEligibilityTrace(eTrace, sigma, Qas)
+        sigma, nextAction, p = self.getSigma(reward, nextPos, pos, action, Qas, agent, flagIndex)
+        Qas = self.updateEligibilityTrace(path, sigma, Qas)
 
         self.checkFlags(nextPos, agent)
-        return nextPos, Qas, eTrace, nextAction, p, True
+        return nextPos, Qas, nextAction, p, True
 
 
     def probability(self, p):
         return random() < p
 
-    def chooseAction(self, pos, Qas, agent):
+    def chooseAction(self, pos, Qas, agent, flagsIndex):
         availableMoves = self.world.canMove(pos)
         if self.probability(self.epsilon):
             return choice(availableMoves), "random"
         else:
-            maxValue, moves = self.computeMax(pos, availableMoves, Qas)
+            maxValue, moves = self.computeMax(pos, availableMoves, Qas, flagsIndex)
             return choice(moves), "greedy"
 
-    def computeMax(self, pos, moves, Qas):
+    def computeMax(self, pos, moves, Qas, flagsIndex):
         x = pos[0]
         y = pos[1]
         res = -9999999999999999999
         best = []
         for i in range(len(moves)):
-            current = Qas[y][x][moves[i]]
+            current = Qas[y][x][flagsIndex][moves[i]]
             if current > res:
                 res = current
                 best = [moves[i]]
@@ -207,21 +205,19 @@ class rsMARL:
         return 100*self.goalReached.count(True)
 
     def updateEligibilityTrace(self, path, sigma, Qas):
-        for f in range(len(Qas)):
-            for y in range(len(Qas[f])):
-                for x in range(len(Qas[f][y])):
-                    for a in range(len(Qas[y][x])):
-                        Qas[y][x][a] += self.alpha * sigma * eTrace[y][x][a]
-                        eTrace[y][x][a] *= self.gamma * self.lambd
-                        if eTrace[y][x][a] < 0.0000000001:
-                            eTrace[y][x][a] = 0
-        return eTrace, Qas
+        size = min (len(path), 56)
+        for i in range (size):
+            pos, a, flagsIndex = path[i]
+            x, y = pos
+            Qas[y][x][flagsIndex][a] *= (self.alpha * sigma)**(size - i)
+
+        return Qas
         
                 
-    def getSigma(self, reward, nextPos, currentPos, action, Qas, agent):
-        nextAction, p = self.chooseAction(nextPos, Qas, agent)
-        originalQ = Qas[currentPos[1]][currentPos[0]][action]
-        nextQ = Qas[nextPos[1]][nextPos[0]][nextAction]
+    def getSigma(self, reward, nextPos, currentPos, action, Qas, agent, flagIndex):
+        nextAction, p = self.chooseAction(nextPos, Qas, agent, flagIndex)
+        originalQ = Qas[currentPos[1]][currentPos[0]][flagIndex][action]
+        nextQ = Qas[nextPos[1]][nextPos[0]][flagIndex][nextAction]
         sigma = \
             reward + (self.gamma*nextQ) - originalQ + self.rewardShaping(currentPos, nextPos, agent)
 
