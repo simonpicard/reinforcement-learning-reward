@@ -38,6 +38,14 @@ class rsMARL:
         eTrace[y][x]
         """
 
+    def flagsIndex(self, flags):
+        res = 0
+        for i in rangel(len(flags)):
+            if flags[i]:
+                res += 2**i 
+        return res
+
+
     def isDone(self):
         return self.world.isOnGoal(self.agent1) and self.world.isOnGoal(self.agent2)
 
@@ -55,16 +63,14 @@ class rsMARL:
         self.firstDone = None
 
     def run(self):
-        Qas1 = [[[0.0, 0.0, 0.0, 0.0] for i in range(self.world.size[0])] for j in range(self.world.size[1])]
-        Qas2 = [[[0.0, 0.0, 0.0, 0.0] for i in range(self.world.size[0])] for j in range(self.world.size[1])]
+        Qas1 = [[[[0.0, 0.0, 0.0, 0.0] for i in range(self.world.size[0])] for j in range(self.world.size[1])] for k in range(2**6)]
+        Qas2 = [[[[0.0, 0.0, 0.0, 0.0] for i in range(self.world.size[0])] for j in range(self.world.size[1])] for k in range(2**6)]
         z = False
         
 
         for run in range(1000):
             self.reset()
             step = 0
-            eTrace1 = [[[0.0, 0.0, 0.0, 0.0] for i in range(self.world.size[0])] for j in range(self.world.size[1])]
-            eTrace2 = [[[0.0, 0.0, 0.0, 0.0] for i in range(self.world.size[0])] for j in range(self.world.size[1])]
             sigma1 = None
             sigma2 = None
             action1 = choice(self.world.canMove(self.agent1))
@@ -78,11 +84,13 @@ class rsMARL:
 
                 if not self.world.isOnGoal(self.agent1) and not done1:
                     path1.append(self.agent1)
-                    self.agent1, Qas1, eTrace1, action1, p1, done1 = self.runAgent(self.agent1, Qas1, eTrace1, action1, 1)
+                    flagIndex1 = self.flagsIndex(self.goalReached1)
+                    self.agent1, Qas1, eTrace1, action1, p1, done1 = self.runAgent(self.agent1, Qas1, path1, action1, 1, flagIndex1)
 
                 if not self.world.isOnGoal(self.agent2) and not done2:
                     path2.append(self.agent2)
-                    self.agent2, Qas2, eTrace2, action2, p2, done2 = self.runAgent(self.agent2, Qas2, eTrace2, action2, 2)
+                    flagIndex2 = self.flagsIndex(self.goalReached1)
+                    self.agent2, Qas2, eTrace2, action2, p2, done2 = self.runAgent(self.agent2, Qas2, eTrace2, action2, 2, flagIndex1)
 
                 if done1 and done2:
                     #print("okFinis")
@@ -123,7 +131,7 @@ class rsMARL:
         print(path2)
         print(path1)
 
-    def runAgent(self, pos, Qas, eTrace, action, agent):
+    def runAgent(self, pos, Qas, path, action, agent, flagIndex):
         #action = self.chooseAction(pos[0], pos[1], Qas)
         done = False
         nextPos = self.getNextPos(pos[0], pos[1], action)
@@ -138,9 +146,9 @@ class rsMARL:
         #if not self.world.isOnGoal(pos):
         #    reward = 0
 
-        sigma, nextAction, p = self.getSigma(reward, nextPos, pos, action, Qas, agent)
-        eTrace[pos[1]][pos[0]][action] = 1
-        eTrace, Qas = self.updateEligibilityTrace(eTrace, sigma, Qas)
+        sigma, nextAction, p = self.getSigma(reward, nextPos, pos, action, Qas[flagIndex], agent)
+        path.append((pos, action, flagIndex))
+        eTrace, Qas = self.updateEligibilityTrace(path, sigma, Qas)
 
         self.checkFlags(nextPos, agent)
         return nextPos, Qas, eTrace, nextAction, p, done
@@ -198,14 +206,15 @@ class rsMARL:
     def getFinalReward(self):
         return 100*self.goalReached.count(True)
 
-    def updateEligibilityTrace(self, eTrace, sigma, Qas):
-        for y in range(len(Qas)):
-            for x in range(len(Qas[y])):
-                for a in range(len(Qas[y][x])):
-                    Qas[y][x][a] += self.alpha * sigma * eTrace[y][x][a]
-                    eTrace[y][x][a] *= self.gamma * self.lambd
-                    if eTrace[y][x][a] < 0.0000000001:
-                        eTrace[y][x][a] = 0
+    def updateEligibilityTrace(self, path, sigma, Qas):
+        for f in range(len(Qas)):
+            for y in range(len(Qas[f])):
+                for x in range(len(Qas[f][y])):
+                    for a in range(len(Qas[y][x])):
+                        Qas[y][x][a] += self.alpha * sigma * eTrace[y][x][a]
+                        eTrace[y][x][a] *= self.gamma * self.lambd
+                        if eTrace[y][x][a] < 0.0000000001:
+                            eTrace[y][x][a] = 0
         return eTrace, Qas
         
                 
