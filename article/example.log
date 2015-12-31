@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2014.4.25)  31 DEC 2015 17:48
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2014.4.25)  31 DEC 2015 19:39
 entering extended mode
 **C:/Users/Thechrom/planBasedRewardShapingMARL/article/example.tex
 (C:/Users/Thechrom/planBasedRewardShapingMARL/article/example.tex
@@ -210,44 +210,44 @@ Underfull \hbox (badness 10000) in paragraph at lines 45--47
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 50--51
+Underfull \hbox (badness 10000) in paragraph at lines 50--52
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 52--54
+Underfull \hbox (badness 10000) in paragraph at lines 53--55
 
  []
 
 
-Underfull \hbox (badness 1057) in paragraph at lines 52--54
+Underfull \hbox (badness 1057) in paragraph at lines 53--55
 \OT1/ptm/m/n/10 where $\OML/cmm/m/it/10 F\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 s; s
 []\OT1/cmr/m/n/10 )$ \OT1/ptm/m/n/10 is a dif-fer-ence of po-ten-tials de-fined
  as
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 52--54
+Underfull \hbox (badness 10000) in paragraph at lines 53--55
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 55--57
+Underfull \hbox (badness 10000) in paragraph at lines 56--58
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 58--59
+Underfull \hbox (badness 10000) in paragraph at lines 59--60
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 60--62
+Underfull \hbox (badness 10000) in paragraph at lines 63--65
 
  []
 
 
-Underfull \hbox (badness 1033) in paragraph at lines 60--62
+Underfull \hbox (badness 1033) in paragraph at lines 63--65
 \OT1/ptm/m/n/10 where $\OML/cmm/m/it/10 !$ \OT1/ptm/m/n/10 is a scal-ing fac-to
 r and $\OML/cmm/m/it/10 CurrentStepInPlan$
  []
@@ -255,19 +255,33 @@ r and $\OML/cmm/m/it/10 CurrentStepInPlan$
 <img/studycase.png, id=13, 424.58624pt x 310.91156pt>
 File: img/studycase.png Graphic file (type png)
  <use img/studycase.png>
-Package pdftex.def Info: img/studycase.png used on input line 66.
+Package pdftex.def Info: img/studycase.png used on input line 70.
 (pdftex.def)             Requested size: 239.39438pt x 175.30005pt.
 
-(C:\Users\Thechrom\planBasedRewardShapingMARL\article\example.bbl
-Underfull \vbox (badness 1946) has occurred while \output is active []
+Underfull \hbox (badness 2368) in paragraph at lines 80--81
+\OT1/ptm/m/n/10 After run-ning thirty times all ex-per-i-ments, the mean
+ []
 
-) [2 <C:/Users/Thechrom/planBasedRewardShapingMARL/article/img/studycase.png>]
+
+Underfull \hbox (badness 10000) in paragraph at lines 80--81
+
+ []
+
+<img/mean.jpg, id=14, 963.6pt x 642.4pt>
+File: img/mean.jpg Graphic file (type jpg)
+ <use img/mean.jpg>
+Package pdftex.def Info: img/mean.jpg used on input line 83.
+(pdftex.def)             Requested size: 239.39438pt x 159.58997pt.
+
+(C:\Users\Thechrom\planBasedRewardShapingMARL\article\example.bbl) [2 <C:/Users
+/Thechrom/planBasedRewardShapingMARL/article/img/studycase.png> <C:/Users/Thech
+rom/planBasedRewardShapingMARL/article/img/mean.jpg>]
 (C:\Users\Thechrom\planBasedRewardShapingMARL\article\example.aux) ) 
 Here is how much of TeX's memory you used:
- 3034 strings out of 493921
- 38542 string characters out of 3147273
- 101642 words of memory out of 3000000
- 6314 multiletter control sequences out of 15000+200000
+ 3041 strings out of 493921
+ 38635 string characters out of 3147273
+ 101650 words of memory out of 3000000
+ 6319 multiletter control sequences out of 15000+200000
  20333 words of font info for 41 fonts, out of 3000000 for 9000
  841 hyphenation exceptions out of 8191
  34i,12n,35p,969b,688s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -282,9 +296,9 @@ Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Program F
 iles/MiKTeX 2.9/fonts/type1/urw/times/utmb8a.pfb><C:/Program Files/MiKTeX 2.9/f
 onts/type1/urw/times/utmr8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/ti
 mes/utmri8a.pfb>
-Output written on example.pdf (2 pages, 115395 bytes).
+Output written on example.pdf (2 pages, 179412 bytes).
 PDF statistics:
- 51 PDF objects out of 1000 (max. 8388607)
+ 52 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 6 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 11 words of extra memory for PDF output out of 10000 (max. 10000000)
 

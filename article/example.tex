@@ -35,9 +35,9 @@ Reinforcement learning is a method of rewarding an agent for taking a good decis
 The possible actions here are going up, down, left and right. A state here, is a position (x, y) in the world space combined the current step in the plan. To each of these Q(s,a )state-action pairs is associated a Q-value translating the goodness of choosing that action while being in that state. The reinforcement algorithm is iterative and dynamic, therefore agents have to run multiple episodes where they have to reach the goal and where they are rewarded depending on the number of flags they got together. At each step, we need to update Q(s,a)  for future learning. A way of achieving this is by applying a temporal-difference update to Q(s,a) so that Q(s,a) will increase only if it leads to a better state than the actual one. This ensures that agents are willing of doing better while reaching the goal. There is an algorithm called SARSA that does this by updating Q-values as follows : \\
 
 $Q(s, a) \leftarrow  Q(s, a) +  \alpha [r + \gamma Q(s', a') - Q(s,a)]$\\\\
-where $\alpha$ is the rate of learning and $\gamma$ is the discount factor. r is the reward returned by the environment. In our case, reward will only be given when agents reach the goal. 
+where $\alpha$ is the rate of learning and $\gamma$ is the discount factor. r is the reward returned by the environment. In our case, rewards will only be given when agents reach the final goal. 
 
-At start, agents know nothing about their environment therefore they will randomly travel through the world space. After few iterations some of their actions will have positive rewarded scores but might not be the most optimals. Therefore, a good balance between exploration and exploitation of the best rewarded actions must be found. The most common method is by using the $\epsilon$-greedy algorithm. It ensures that at each step, the best value action will be chosen with a probability 1- $\epsilon$ and otherways the agent will explore a new action.
+At the beginning, agents know nothing about their environment, therefore they will randomly travel through the world space. After few iterations some of their actions will have positive rewarded scores but might not be the most optimals. Therefore, a good balance between exploration and exploitation of the best rewarded actions must be found. The most common method is by using the $\epsilon$-greedy algorithm. It ensures that at each step, the best value action will be chosen with a probability 1- $\epsilon$ and otherways, the agent will explore a new action.
 
 
 A well-known method to fasten this process is eligibility traces. When a reward is received, the lasts state-actions pairs that the agent has been walking through are also updated according to their temporal difference with the last state-action pair. Each Q-value is updated as follows : \\
@@ -47,6 +47,7 @@ where $\lambda$ has to be lower or equal to 1 \citep{etrace}. We choosed  $\lamb
 
 \subsection{Plan-Based Reward Shaping}
 
+Reward shaping is a method in reinforcement learning that attributes additionnal rewards to the agents that should guide them to find their optimality and in a much faster way.
 The addition of reward shaping to reinforcement learning changes the SARSA algorithm formula as follows: \\
 
 $Q(s, a) \leftarrow  Q(s, a) +  \alpha [r + F(s, s') + \gamma Q(s', a') - Q(s,a)]$\\\\
@@ -57,10 +58,13 @@ where $\phi$ is some function over states. The difference of potentials is usefu
 
 For plan-based reward shaping, agents are given STRIPS plans that transposes into a list of states. The agent's potential $\phi$ can be chosen as :\\
 
-$\phi (s) = \omega * CurrentStepInPlan$\\\\
+$\phi (s) = \omega * CurrentStepInPlan$
+
+$\omega = MaxReward/NumStepsInPlan$\\\\
 where $\omega$ is a scaling factor and $CurrentStepInPlan$ is the corresponding plan's step of the agent's state.
 
 \section{Study Case}
+
 
 \begin{figure}[h!]
   \includegraphics[width=\linewidth]{img/studycase.png}
@@ -71,8 +75,17 @@ where $\omega$ is a scaling factor and $CurrentStepInPlan$ is the corresponding 
 
 
 
-
 \section{Results and Discussion}
+
+After running thirty times all experiments, the mean discounter rewards per episode were plotted on the graph Figure \ref{fig:results1}. \\
+
+\begin{figure}[h!]
+  \includegraphics[width=\linewidth]{img/mean.jpg}
+  \caption{Results.}
+  \label{fig:results1}
+\end{figure}
+
+
 \section{Conclusion}
 
 
