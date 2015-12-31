@@ -86,3 +86,12 @@ class World:
 
     def getCurrentRoom(self, pos):
         return self.world[pos[1]][pos[0]]
+
+    def flagsIndexToName(self, flags):
+        res = []
+        for f in flags:
+            res.append(self.flagsNames[f])
+        return res
+
+    def roomsIndexToName(self, room):
+        return self.roomsNames[room]

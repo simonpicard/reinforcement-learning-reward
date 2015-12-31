@@ -83,12 +83,10 @@ class rsMARL:
 
                 if not self.world.isOnGoal(self.agent1) and not done1:
                     flagIndex1 = self.flagsIndex(self.goalReached1)
-                    path1.append([self.agent1, action1, flagIndex1])
                     self.agent1, Qas1, action1, p1, done1 = self.runAgent(self.agent1, Qas1, path1, action1, 1, flagIndex1)
 
                 if not self.world.isOnGoal(self.agent2) and not done2:
                     flagIndex2 = self.flagsIndex(self.goalReached2)
-                    path2.append([self.agent2, action2, flagIndex2])
                     self.agent2, Qas2, action2, p2, done2 = self.runAgent(self.agent2, Qas2, path2, action2, 2, flagIndex2)
 
                 if done1 and done2:
@@ -129,9 +127,13 @@ class rsMARL:
             print (run, step, self.goalReached.count(True), int(self.totalReward/(run+1)))
         print(path2)
         print(path1)
+        print(self.world.flagsIndexToName(self.flagsGot1))
+        print(self.world.flagsIndexToName(self.flagsGot2))
+
 
     def runAgent(self, pos, Qas, path, action, agent, flagIndex):
         #action = self.chooseAction(pos[0], pos[1], Qas)
+        path.append((pos, action, flagIndex))
         done = False
         nextPos = self.getNextPos(pos[0], pos[1], action)
         if self.world.isOnGoal(nextPos):
@@ -146,7 +148,6 @@ class rsMARL:
         #    reward = 0
 
         sigma, nextAction, p = self.getSigma(reward, nextPos, pos, action, Qas, agent, flagIndex)
-        path.append((pos, action, flagIndex))
         Qas = self.updateEligibilityTrace(path, sigma, Qas)
 
         self.checkFlags(nextPos, agent)
@@ -154,6 +155,7 @@ class rsMARL:
 
     def finishEpisode(self, pos, Qas, path, action, agent, flagIndex):
         #action = self.chooseAction(pos[0], pos[1], Qas)
+        path.append((pos, action, flagIndex))
         nextPos = self.getNextPos(pos[0], pos[1], action)
         reward = self.getReward(nextPos)
         #reward = self.testFlags(pos, agent)*100
@@ -205,11 +207,14 @@ class rsMARL:
         return 100*self.goalReached.count(True)
 
     def updateEligibilityTrace(self, path, sigma, Qas):
-        size = min (len(path), 56)
-        for i in range (size):
+        #size = min (len(path), 56)
+        cells = min(len(path), 805)
+        #(0.99*0.4)**805 = 0.0
+        size = len(path)
+        for i in range (size-1, size-cells-1, -1):
             pos, a, flagsIndex = path[i]
             x, y = pos
-            Qas[y][x][flagsIndex][a] *= (self.alpha * sigma)**(size - i)
+            Qas[y][x][flagsIndex][a] += self.alpha*sigma*(self.gamma * self.lambd)**(size -1 - i)
 
         return Qas
         
@@ -217,13 +222,29 @@ class rsMARL:
     def getSigma(self, reward, nextPos, currentPos, action, Qas, agent, flagIndex):
         nextAction, p = self.chooseAction(nextPos, Qas, agent, flagIndex)
         originalQ = Qas[currentPos[1]][currentPos[0]][flagIndex][action]
-        nextQ = Qas[nextPos[1]][nextPos[0]][flagIndex][nextAction]
+        #nextFlagIndex = self.testFlagsIndex(nextPos, agent) --> fait bugger TODO
+        nextFlagIndex = flagIndex
+        nextQ = Qas[nextPos[1]][nextPos[0]][nextFlagIndex][nextAction]
         sigma = \
             reward + (self.gamma*nextQ) - originalQ + self.rewardShaping(currentPos, nextPos, agent)
 
         return sigma, nextAction, p
 
 
+    def checkFlags(self, pos, agent):
+        flag = None
+        if pos in self.world.flags:
+            flag = self.world.flags.index(pos)
+        else:
+            return
+        if not self.goalReached[flag]:
+            self.goalReached[flag] = True
+            if agent == 1 :
+                self.flagsGot1.append(flag)
+            else:
+                self.flagsGot2.append(flag)
+
+    """ Ancienne implémentation incorrect mais qui fait converger la simulation... TODO
     def checkFlags(self, pos, agent):
         if pos in self.world.flags:
             self.goalReached[self.world.flags.index(pos)] = True
@@ -235,7 +256,7 @@ class rsMARL:
                 self.goalReached2[self.world.flags.index(pos)] = True
                 if not self.world.flags.index(pos) in self.flagsGot2:
                     self.flagsGot2.append(self.world.flags.index(pos))
-
+    """
 
     def testFlags(self, pos, agent):
         if agent == 1:
@@ -245,6 +266,16 @@ class rsMARL:
         if pos in self.world.flags:
             tmp[self.world.flags.index(pos)] = True
         return tmp.count(True)
+
+
+    def testFlagsIndex(self, pos, agent):
+        if agent == 1:
+            tmp = list(self.goalReached1)
+        if agent == 2:
+            tmp = list(self.goalReached2)
+        if pos in self.world.flags:
+            tmp[self.world.flags.index(pos)] = True
+        return self.flagsIndex(tmp)
 
     def rewardShaping(self, currentPos, nextPos, agent):
         return self.gamma*self.phi(nextPos, agent)-self.phi(currentPos, agent)
@@ -290,9 +321,10 @@ class rsMARL:
         for i in range(len(plan)):
             if plan[i][0] == roomIn:
                 flagsRequired = plan[i][1:]
-                if flagsRequired == flagsGot:
+                if self.compareUnordered(flagsRequired,flagsGot):
+        #        if flagsRequired==flagsGot: Je ne sais pas lequel choisir TODO
                     step = i
-        #print (roomIn, flagsGot, plan[0][0], step)
+        #print (step, self.world.roomsIndexToName(roomIn), self.world.flagsIndexToName(flagsGot))
         if step == None:
             step = lastStep
         if step > lastStep:
@@ -301,27 +333,16 @@ class rsMARL:
             else:
                 self.lastStep2 = step
         return step
-                
-
-    def getCurrentRoom(self, pos):
-        return self.world[pos[1]][pos[0]]
 
     def getFlagsGot(self, agent):
-        """
-        if agent == 1:
-            flags = self.goalReached1
-        else:
-            flags = self.goalReached2
-        res = []
-        for i in range(len(flags)):
-            if flags[i]:
-                res.append(i)
-        """
         if agent == 1:
             res = self.flagsGot1
         else:
             res = self.flagsGot2
         return res
+
+    def compareUnordered(self, a, b):
+        return sorted(a) == sorted(b)
 
 if __name__ == '__main__':
 
