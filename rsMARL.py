@@ -147,7 +147,6 @@ class rsMARL:
         plt.ylabel("Discounted Total Reward Per Episode")
         #show()
         plt.savefig("initialResult.png")
-
         print(path2)
         print(path1)
         print(self.world.flagsIndexToName(self.flagsGot1))
@@ -166,9 +165,6 @@ class rsMARL:
             else:
                 done = True
         reward = self.getReward(nextPos)
-        #reward = self.testFlags(pos, agent)*100
-        #if not self.world.isOnGoal(pos):
-        #    reward = 0
 
         sigma, nextAction, p = self.getSigma(reward, nextPos, pos, action, Qas, agent, flagIndex)
         Qas = self.updateEligibilityTrace(path, sigma, Qas)
@@ -177,13 +173,9 @@ class rsMARL:
         return nextPos, Qas, nextAction, p, done
 
     def finishEpisode(self, pos, Qas, path, action, agent, flagIndex):
-        #action = self.chooseAction(pos[0], pos[1], Qas)
         path.append((pos, action, flagIndex))
         nextPos = self.getNextPos(pos[0], pos[1], action)
         reward = self.getReward(nextPos)
-        #reward = self.testFlags(pos, agent)*100
-        #if not self.world.isOnGoal(pos):
-        #    reward = 0
 
         sigma, nextAction, p = self.getSigma(reward, nextPos, pos, action, Qas, agent, flagIndex)
         Qas = self.updateEligibilityTrace(path, sigma, Qas)
@@ -245,8 +237,8 @@ class rsMARL:
     def getSigma(self, reward, nextPos, currentPos, action, Qas, agent, flagIndex):
         nextAction, p = self.chooseAction(nextPos, Qas, agent, flagIndex)
         originalQ = Qas[currentPos[1]][currentPos[0]][flagIndex][action]
-        #nextFlagIndex = self.testFlagsIndex(nextPos, agent) ----> crée un cycle TODO
-        nextFlagIndex = flagIndex
+        nextFlagIndex = self.testFlagsIndex(nextPos, agent) 
+        #nextFlagIndex = flagIndex
         nextQ = Qas[nextPos[1]][nextPos[0]][nextFlagIndex][nextAction]
         sigma = \
             reward + (self.gamma*nextQ) - originalQ + self.rewardShaping(currentPos, nextPos, agent)
@@ -284,8 +276,7 @@ class rsMARL:
             tmp = list(self.goalReached1)
         if agent == 2:
             tmp = list(self.goalReached2)
-        if pos in self.world.flags:
-            tmp[self.world.flags.index(pos)] = True
+
         return self.flagsIndex(tmp)
 
     def rewardShaping(self, currentPos, nextPos, agent):
@@ -332,8 +323,8 @@ class rsMARL:
         for i in range(len(plan)):
             if plan[i][0] == roomIn:
                 flagsRequired = plan[i][1:]
-                if self.compareUnordered(flagsRequired,flagsGot):
-        #        if flagsRequired==flagsGot: Je ne sais pas lequel choisir TODO
+                if self.compareUnordered(flagsRequired,flagsGot): 
+        #        if flagsRequired==flagsGot: 
                     step = i
         #print (step, self.world.roomsIndexToName(roomIn), self.world.flagsIndexToName(flagsGot))
         if step == None:
