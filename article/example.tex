@@ -56,15 +56,16 @@ where $ F(s, s')$  is a difference of potentials defined as follows : \\
 $F(s, s') =\gamma \phi (s') - \phi (s)$\\\\
 where $\phi$ is some function over states. The difference of potentials is usefull for avoiding cycles  \citep{rs2}.
 
-For plan-based reward shaping, agents are given STRIPS plans that transposes into a list of states. The agent's potential $\phi$ can be chosen as :\\
+For plan-based reward shaping, agents are given STRIPS plans that transposes into a list of states. It consists in a set of subgoals that the agent should be focusing on in the specified order to increase the total ending reward. In our experiment, subgoals are : going from a room to another, and collecting a flag in the current room when specified. The agent's potential $\phi$ can be chosen as :\\
 
 $\phi (s) = \omega * CurrentStepInPlan$
 
 $\omega = MaxReward/NumStepsInPlan$\\\\
-where $\omega$ is a scaling factor and $CurrentStepInPlan$ is the corresponding plan's step of the agent's state.
+where $\omega$ is a scaling factor and $CurrentStepInPlan$ is the corresponding plan's step of the agent's state. We will compare the differences between individual and joint plan based reward shaping and we will see the benefits and constraints of each.
 
 \section{Study Case}
 
+We choose two agents who starts on the S1 and S2 squares respectively. Their objective is to reach the goal while trying to collect a maximum of flags while doing so. At each time step, they will move one square up, down, left or right unless they collide with a wall or the other agent. Each of our agents has to reach the goal to end an episode. When an agent reaches the goal, his episode is over and he will wait the other agent to finish his run. When they both reach the goal, they receive a reward equal to $100*NumFlagsCollected$. 
 
 \begin{figure}[h!]
   \includegraphics[width=\linewidth]{img/studycase.png}
