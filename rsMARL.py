@@ -2,6 +2,10 @@ from random import random, choice
 import copy
 from world import World
 from worldParser import parse
+import numpy as np
+
+import matplotlib.pyplot as plt
+plt.style.use('bmh')
 
 shapeDic = {"None":0, "Flag":1, "Solo":2, "Join":3, "Flag+Solo":4, "Flag+Join":5}
 
@@ -63,68 +67,86 @@ class rsMARL:
         self.firstDone = None
 
     def run(self):
-        Qas1 = [[[[0.0, 0.0, 0.0, 0.0] for k in range(2**6)] for i in range(self.world.size[0])] for j in range(self.world.size[1])]
-        Qas2 = [[[[0.0, 0.0, 0.0, 0.0] for k in range(2**6)] for i in range(self.world.size[0])] for j in range(self.world.size[1])]
-        z = False
-        
-        for run in range(1000):
-            self.reset()
-            step = 0
-            sigma1 = None
-            sigma2 = None
-            action1 = choice(self.world.canMove(self.agent1))
-            action2 = choice(self.world.canMove(self.agent2))
-            path1 = []
-            path2 = []
-            done1 = False
-            done2 = False
-            while not self.isDone() :
-                step += 1
+        discountedReward = [[0 for i in range(1000)] for i in range(30)]
+        for averageId in range(30):
+            Qas1 = [[[[0.0, 0.0, 0.0, 0.0] for k in range(2**6)] for i in range(self.world.size[0])] for j in range(self.world.size[1])]
+            Qas2 = [[[[0.0, 0.0, 0.0, 0.0] for k in range(2**6)] for i in range(self.world.size[0])] for j in range(self.world.size[1])]
+            z = False
 
-                if not self.world.isOnGoal(self.agent1) and not done1:
-                    flagIndex1 = self.flagsIndex(self.goalReached1)
-                    self.agent1, Qas1, action1, p1, done1 = self.runAgent(self.agent1, Qas1, path1, action1, 1, flagIndex1)
+            self.totalReward = 0
 
-                if not self.world.isOnGoal(self.agent2) and not done2:
-                    flagIndex2 = self.flagsIndex(self.goalReached2)
-                    self.agent2, Qas2, action2, p2, done2 = self.runAgent(self.agent2, Qas2, path2, action2, 2, flagIndex2)
+            for run in range(1000):
+                self.reset()
+                step = 0
+                sigma1 = None
+                sigma2 = None
+                action1 = choice(self.world.canMove(self.agent1))
+                action2 = choice(self.world.canMove(self.agent2))
+                path1 = []
+                path2 = []
+                done1 = False
+                done2 = False
+                while not self.isDone() :
+                    step += 1
 
-                if done1 and done2:
-                    if self.firstDone == 1:
-                        self.agent1, Qas1, action1, p1, done1 = self.finishEpisode(self.agent1, Qas1, path1, action1, 1, flagIndex1)
-                    else:
-                        self.agent2, Qas2, action2, p2, done2 = self.finishEpisode(self.agent2, Qas2, path2, action2, 2, flagIndex2)
-                #*print(self.agent1, self.agent2)
+                    if not self.world.isOnGoal(self.agent1) and not done1:
+                        flagIndex1 = self.flagsIndex(self.goalReached1)
+                        self.agent1, Qas1, action1, p1, done1 = self.runAgent(self.agent1, Qas1, path1, action1, 1, flagIndex1)
+
+                    if not self.world.isOnGoal(self.agent2) and not done2:
+                        flagIndex2 = self.flagsIndex(self.goalReached2)
+                        self.agent2, Qas2, action2, p2, done2 = self.runAgent(self.agent2, Qas2, path2, action2, 2, flagIndex2)
+
+                    if done1 and done2:
+                        #print("okFinis")
+                        if self.firstDone == 1:
+                            self.agent1, Qas1, action1, p1, done1 = self.finishEpisode(self.agent1, Qas1, path1, action1, 1, flagIndex1)
+                        else:
+                            self.agent2, Qas2, action2, p2, done2 = self.finishEpisode(self.agent2, Qas2, path2, action2, 2, flagIndex2)
+                    #*print(self.agent1, self.agent2)
 
 
-                # if step%100 == 0:
-                #     if self.shape == "Solo" or self.shape == "Join":
-                #         print(step, self.world.isOnGoal(self.agent1), self.world.isOnGoal(self.agent2), self.getStepPlan(1, self.agent1, self.shape), self.getStepPlan(2, self.agent2, self.shape))
-                #     else:
-                #         print(step, done1, done2)
-                # #print (self.agent2)
-                # if step > 10000 and not z:
-                #     a = input("What to do")
-                #     if a == "e":
-                #         z = True
-                #         pass
-                #     else:
-                #         print("ok")
-                #         if not self.world.isOnGoal(self.agent1):
-                #             print(self.agent1, self.world.canMove(self.agent1), Qas1[self.agent1[1]][self.agent1[0]], action1, p1, self.testFlags([0,0],1))
-                #             for i in range(len(Qas1)):
-                #                 for j in range(len(Qas1[i])):
-                #                     print(list(map(int, Qas1[i][j])), end= " ")
-                #                 print("")
-                #         if not self.world.isOnGoal(self.agent2):
-                #             print(self.agent2, self.world.canMove(self.agent2), Qas2[self.agent2[1]][self.agent2[0]], action2, p2, self.testFlags([0,0],2))
-                #             for i in range(len(Qas2)):
-                #                 for j in range(len(Qas2[i])):
-                #                     print(list(map(int, Qas2[i][j])), end= " ")
-                #                 print("")
+                    # if step%100 == 0:
+                    #     if self.shape == "Solo" or self.shape == "Join":
+                    #         print(step, self.world.isOnGoal(self.agent1), self.world.isOnGoal(self.agent2), self.getStepPlan(1, self.agent1, self.shape), self.getStepPlan(2, self.agent2, self.shape))
+                    #     else:
+                    #         print(step, done1, done2)
+                    # #print (self.agent2)
+                    # if step > 10000 and not z:
+                    #     a = input("What to do")
+                    #     if a == "e":
+                    #         z = True
+                    #         pass
+                    #     else:
+                    #         print("ok")
+                    #         if not self.world.isOnGoal(self.agent1):
+                    #             print(self.agent1, self.world.canMove(self.agent1), Qas1[self.agent1[1]][self.agent1[0]], action1, p1, self.testFlags([0,0],1))
+                    #             for i in range(len(Qas1)):
+                    #                 for j in range(len(Qas1[i])):
+                    #                     print(list(map(int, Qas1[i][j])), end= " ")
+                    #                 print("")
+                    #         if not self.world.isOnGoal(self.agent2):
+                    #             print(self.agent2, self.world.canMove(self.agent2), Qas2[self.agent2[1]][self.agent2[0]], action2, p2, self.testFlags([0,0],2))
+                    #             for i in range(len(Qas2)):
+                    #                 for j in range(len(Qas2[i])):
+                    #                     print(list(map(int, Qas2[i][j])), end= " ")
+                    #                 print("")
 
-            self.totalReward += self.getFinalReward()
-            print (run, step, self.goalReached.count(True), int(self.totalReward/(run+1)))
+                self.totalReward += self.getFinalReward()
+                print (run, step, self.goalReached.count(True), int(self.totalReward/(run+1)))
+
+                discountedReward[averageId][run] = 0 if (int(self.totalReward/(run+1))-step) < 0 else (int(self.totalReward/(run+1))-step)
+
+        discountedReward = np.mean(discountedReward, axis=0)
+
+        plt.figure(figsize=(15, 10))
+        plt.title(str("Initial Results"))
+
+        plt.plot(discountedReward)
+        plt.xlabel("Episodes")
+        plt.ylabel("Discounted Total Reward Per Episode")
+        #show()
+        plt.savefig("initialResult.png")
         print(path2)
         print(path1)
         print(self.world.flagsIndexToName(self.flagsGot1))
@@ -339,5 +361,5 @@ if __name__ == '__main__':
     alpha = 0.1
     lambd = 0.4
     plans = (plan1Join, plan2Join, plan1Solo, plan2Solo)
-    marl = rsMARL(w, epsilon, gamma, alpha, "Join", lambd, plans, start)
+    marl = rsMARL(w, epsilon, gamma, alpha, "None", lambd, plans, start)
     marl.run()
