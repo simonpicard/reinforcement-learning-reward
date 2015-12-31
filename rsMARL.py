@@ -95,6 +95,7 @@ class rsMARL:
                         self.agent1, Qas1, action1, p1, done1 = self.finishEpisode(self.agent1, Qas1, path1, action1, 1, flagIndex1)
                     else:
                         self.agent2, Qas2, action2, p2, done2 = self.finishEpisode(self.agent2, Qas2, path2, action2, 2, flagIndex2)
+                #*print(self.agent1, self.agent2)
 
 
                 # if step%100 == 0:
@@ -222,7 +223,7 @@ class rsMARL:
     def getSigma(self, reward, nextPos, currentPos, action, Qas, agent, flagIndex):
         nextAction, p = self.chooseAction(nextPos, Qas, agent, flagIndex)
         originalQ = Qas[currentPos[1]][currentPos[0]][flagIndex][action]
-        #nextFlagIndex = self.testFlagsIndex(nextPos, agent) --> fait bugger TODO
+        #nextFlagIndex = self.testFlagsIndex(nextPos, agent) ----> crée un cycle TODO
         nextFlagIndex = flagIndex
         nextQ = Qas[nextPos[1]][nextPos[0]][nextFlagIndex][nextAction]
         sigma = \
@@ -241,22 +242,10 @@ class rsMARL:
             self.goalReached[flag] = True
             if agent == 1 :
                 self.flagsGot1.append(flag)
+                self.goalReached1[flag] = True
             else:
                 self.flagsGot2.append(flag)
-
-    """ Ancienne implémentation incorrect mais qui fait converger la simulation... TODO
-    def checkFlags(self, pos, agent):
-        if pos in self.world.flags:
-            self.goalReached[self.world.flags.index(pos)] = True
-            if agent == 1 :
-                self.goalReached1[self.world.flags.index(pos)] = True
-                if not self.world.flags.index(pos) in self.flagsGot1:
-                    self.flagsGot1.append(self.world.flags.index(pos))
-            else:
-                self.goalReached2[self.world.flags.index(pos)] = True
-                if not self.world.flags.index(pos) in self.flagsGot2:
-                    self.flagsGot2.append(self.world.flags.index(pos))
-    """
+                self.goalReached2[flag] = True
 
     def testFlags(self, pos, agent):
         if agent == 1:
@@ -359,5 +348,5 @@ if __name__ == '__main__':
     alpha = 0.1
     lambd = 0.4
     plans = (plan1Join, plan2Join, plan1Solo, plan2Solo)
-    marl = rsMARL(w, epsilon, gamma, alpha, "Flags", lambd, plans, start)
+    marl = rsMARL(w, epsilon, gamma, alpha, "Join", lambd, plans, start)
     marl.run()
