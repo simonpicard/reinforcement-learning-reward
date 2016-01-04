@@ -3,6 +3,7 @@ import copy
 from world import World
 from worldParser import parse
 import numpy as np
+from handlePlot import *
 
 
 import matplotlib.pyplot as plt
@@ -11,7 +12,7 @@ plt.style.use('bmh')
 shapeDic = {"None":0, "Flag":1, "Solo":2, "Join":3, "Flag+Solo":4, "Flag+Join":5}
 
 class rsMARL:
-    def __init__(self, w, epsilon, gamma, alpha, lambd, start, flagShape, initialQ, runs):
+    def __init__(self, w, epsilon, gamma, alpha, lambd, start, flagShape, initialQ, runs, competitive):
         
         self.world = w
 
@@ -32,6 +33,8 @@ class rsMARL:
         self.runs = runs
 
         self.rewards = [0.0]*runs
+
+        self.competitive = competitive
 
         """
         size = width, height
@@ -85,6 +88,7 @@ class rsMARL:
             done2 = False
             flagIndex1 = 0
             flagIndex2 = 0
+            quitted = False
             while not self.isDone() :
                 step += 1
 
@@ -100,19 +104,10 @@ class rsMARL:
                     else:
                         self.agent2, Qas2, action2, p2, done2, flagIndex2 = self.finishEpisode(self.agent2, Qas2, path2, action2, 2, flagIndex2)
                 
-                if step > 0:
-                    x1, y1 = self.agent1
-                    x2, y2 = self.agent2
-                    #if not done1:
-                    #    print(run, step, (self.agent1, action1, flagIndex1), Qas1[y1][x1][flagIndex1], p1, self.printShit(self.agent1, 1))
-                    #else:
-                        #print()
-                    if not done2:
-                        pass
-                        #print(run, step, (self.agent2, action2, flagIndex2), Qas2[y2][x2][flagIndex2], p2, self.printShit(self.agent2, 2))
-                
-                if step%100000 == 0:
-                    print(step)
+                if step > 20000:
+                    print("Quitted")
+                    quitted = True
+                    break
                 
 
                 # if step%100 == 0:
@@ -141,8 +136,10 @@ class rsMARL:
                 #                     print(list(map(int, Qas2[i][j])), end= " ")
                 #                 print("")
 
-            self.rewards[run] = self.getFinalReward()-step
-            self.totalReward += self.getFinalReward()
+            if quitted:
+                self.rewards[run] = 0
+            else:
+                self.rewards[run] = self.getTotalReward()-step
             #print (run, step, self.getFinalReward(), self.getFinalReward()-step, int(self.totalReward/(run+1)), self.world.flagsIndexToName(self.flagsGot1), self.world.flagsIndexToName(self.flagsGot2), int(self.phi(path1[-1][0], 1)), int(self.phi(path2[-1][0], 2)))
         #print(path2)
         #print(path1)
@@ -166,7 +163,7 @@ class rsMARL:
             else:
                 done = True
 
-        reward = self.getReward(nextPos)
+        reward = self.getReward(nextPos, agent)
 
         sigma, nextAction, p, nextFlagIndex = self.getSigma(reward, nextPos, pos, action, Qas, agent, flagIndex)
         Qas = self.updateEligibilityTrace(path, sigma, Qas)
@@ -177,7 +174,7 @@ class rsMARL:
     def finishEpisode(self, pos, Qas, path, action, agent, flagIndex):
         path.append((pos, action, flagIndex))
         nextPos = self.getNextPos(pos[0], pos[1], action)
-        reward = self.getReward(nextPos)
+        reward = self.getReward(nextPos, agent)
 
         sigma, nextAction, p, nextFlagIndex = self.getSigma(reward, nextPos, pos, action, Qas, agent, flagIndex)
         Qas = self.updateEligibilityTrace(path, sigma, Qas)
@@ -214,13 +211,22 @@ class rsMARL:
     def getNextPos(self, x, y, move):
         return [x + self.moves[move][0], y + self.moves[move][1]]
 
-    def getReward(self, pos):
+    def getReward(self, pos, agent):
         if self.world.isOnGoal(pos):
-            return self.getFinalReward()
+            if self.competitive:
+                return self.getCompetitiveReward(agent)
+            else:
+                return self.getTotalReward()
         else:
             return 0
 
-    def getFinalReward(self):
+    def getCompetitiveReward(self, agent):
+        if agent == 1:
+            return 100*self.goalReached1.count(True)
+        else:
+            return 100*self.goalReached2.count(True)
+
+    def getTotalReward(self):
         return 100*self.goalReached.count(True)
 
     def updateEligibilityTrace(self, path, sigma, Qas):
@@ -305,9 +311,29 @@ class rsMARL:
             omega = 100
             return omega*self.testFlags(pos, agent)
 
+
+def runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, flagShape, initialQ, runs, fOut, competitive):
+    print(fOut)
+    rewards = [0.0]*runs
+
+    for i in range(nbSimulation):
+        print(i)
+        marl = rsMARL(w, epsilon, gamma, alpha, lambd, start, flagShape, initialQ, runs, competitive)
+        marl.run()
+        tmp = [0.0]*runs
+        for i in range(runs):
+            tmp[i] += marl.rewards[i]
+        rewards = np.add(rewards, tmp)
+
+    for i in range(runs):
+        rewards[i] /= (nbSimulation)
+        #print(rewards[i])
+
+    printInFile(fOut, rewards)
+
 if __name__ == '__main__':
 
-    size, goal, start, doors, flags, world, flagsNames, roomsNames, plan1Join, plan2Join, plan1Solo, plan2Solo =\
+    size, goal, start, doors, flags, world, flagsNames, roomsNames, plan1Join, plan2Join, plan1Solo, plan2Solo, plan1Solo6, plan2Solo6, plan1Solo5, plan2Solo5, plan1Solo4, plan2Solo4 =\
         parse("world.txt")
 
     w = World(size, goal, doors, flags, world, flagsNames, roomsNames)
@@ -318,21 +344,10 @@ if __name__ == '__main__':
     lambd = 0.4
 
 
-    nbSimulation = 10
+    nbSimulation = 30
 
-    flagShape = False
     initialQ = 0.0
     runs = 2000
 
 
-    rewardsNoShape = [0.0]*runs
-
-    for i in range(nbSimulation):
-        print(i)
-        marl = rsMARL(w, epsilon, gamma, alpha, lambd, start, flagShape, initialQ, runs)
-        marl.run()
-        rewardsNoShape = np.add(rewardsNoShape, marl.rewards)
-
-    for i in range(runs):
-        rewardsNoShape[i] /= (nbSimulation)
-        print(rewardsNoShape[i])
+    runFor(1, w, epsilon, gamma, alpha, lambd, start, True, initialQ, runs, "txt/initial/flag-based2.txt", False)

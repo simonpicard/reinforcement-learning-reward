@@ -86,3 +86,96 @@ RoomA F E C B A
 HallA F E C B A
 RoomD F E C B A
 RoomD F E C B A D
+18
+HallA
+RoomA
+RoomA A
+HallA A
+HallB A
+RoomC A
+RoomC A C
+RoomE A C
+RoomE A C E
+RoomE A C E F
+RoomC A C E F
+HallB A C E F
+RoomB A C E F
+RoomB A C E F B
+HallB A C E F B
+HallA A C E F B
+RoomD A C E F B
+RoomD A C E F B D
+15
+RoomE
+RoomE F
+RoomE F E
+RoomC F E
+RoomC F E C
+HallB F E C
+RoomB F E C
+RoomB F E C B
+HallB F E C B
+HallA F E C B
+RoomA F E C B
+RoomA F E C B A
+HallA F E C B A
+RoomD F E C B A
+RoomD F E C B A D
+17
+HallA
+RoomA
+RoomA A
+HallA A
+HallB A
+RoomC A
+RoomC A C
+RoomE A C
+RoomE A C E
+RoomC A C E
+HallB A C E
+RoomB A C E
+RoomB A C E B
+HallB A C E B
+HallA A C E B
+RoomD A C E B
+RoomD A C E B D
+12
+RoomE
+RoomE F
+RoomE F E
+RoomC F E
+RoomC F E C
+HallB F E C
+RoomB F E C
+RoomB F E C B
+HallB F E C B
+HallA F E C B
+RoomD F E C B
+RoomD F E C B D
+14
+HallA
+RoomA
+RoomA A
+HallA A
+HallB A
+RoomC A
+RoomC A C
+HallB A C
+RoomB A C
+RoomB A C B
+HallB A C B
+HallA A C B
+RoomD A C B
+RoomD A C B D
+11
+RoomE
+RoomE F
+RoomE F E
+RoomC F E
+HallB F E
+RoomB F E
+RoomB F E B
+HallB F E B
+HallA F E B
+RoomD F E B
+RoomD F E B D

@@ -87,12 +87,60 @@ def parse(filename):
             plan2Solo.append(content[0].strip("\n").split(" "))
             del content[0]
             
+        sizet = int(content[0].strip("\n"))
+        del content[0]
+        plan1Solo6 = []
+        for i in range(sizet):
+            plan1Solo6.append(content[0].strip("\n").split(" "))
+            del content[0]
+            
+        sizet = int(content[0].strip("\n"))
+        del content[0]
+        plan2Solo6 = []
+        for i in range(sizet):
+            plan2Solo6.append(content[0].strip("\n").split(" "))
+            del content[0]
+            
+        sizet = int(content[0].strip("\n"))
+        del content[0]
+        plan1Solo5 = []
+        for i in range(sizet):
+            plan1Solo5.append(content[0].strip("\n").split(" "))
+            del content[0]
+            
+        sizet = int(content[0].strip("\n"))
+        del content[0]
+        plan2Solo5 = []
+        for i in range(sizet):
+            plan2Solo5.append(content[0].strip("\n").split(" "))
+            del content[0]
+            
+        sizet = int(content[0].strip("\n"))
+        del content[0]
+        plan1Solo4 = []
+        for i in range(sizet):
+            plan1Solo4.append(content[0].strip("\n").split(" "))
+            del content[0]
+            
+        sizet = int(content[0].strip("\n"))
+        del content[0]
+        plan2Solo4 = []
+        for i in range(sizet):
+            plan2Solo4.append(content[0].strip("\n").split(" "))
+            del content[0]
+            
         plan1Join = handlePlan(plan1Join, roomsNames, flagsNames)
         plan2Join = handlePlan(plan2Join, roomsNames, flagsNames)
         plan1Solo = handlePlan(plan1Solo, roomsNames, flagsNames)
         plan2Solo = handlePlan(plan2Solo, roomsNames, flagsNames)
+        plan1Solo6 = handlePlan(plan1Solo6, roomsNames, flagsNames)
+        plan2Solo6 = handlePlan(plan2Solo6, roomsNames, flagsNames)
+        plan1Solo5 = handlePlan(plan1Solo5, roomsNames, flagsNames)
+        plan2Solo5 = handlePlan(plan2Solo5, roomsNames, flagsNames)
+        plan1Solo4 = handlePlan(plan1Solo4, roomsNames, flagsNames)
+        plan2Solo4 = handlePlan(plan2Solo4, roomsNames, flagsNames)
 
-        return size, goal, start, doors, flags, world, flagsNames, roomsNames, plan1Join, plan2Join, plan1Solo, plan2Solo
+        return size, goal, start, doors, flags, world, flagsNames, roomsNames, plan1Join, plan2Join, plan1Solo, plan2Solo, plan1Solo6, plan2Solo6, plan1Solo5, plan2Solo5, plan1Solo4, plan2Solo4
 
 
 def handlePlan(plan, roomsNames, flagsNames):
