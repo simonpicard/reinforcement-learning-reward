@@ -2,12 +2,11 @@ from random import random, choice
 import copy
 from world import World
 from worldParser import parse
-import numpy as np
 
 shapeDic = {"None":0, "Flag":1, "Solo":2, "Join":3, "Flag+Solo":4, "Flag+Join":5}
 
 class rsMARL:
-    def __init__(self, w, epsilon, gamma, alpha, lambd, start, flagShape, initialQ, runs):
+    def __init__(self, w, epsilon, gamma, alpha, lambd, start, plans, flagShape, initialQ):
         
         self.world = w
 
@@ -19,15 +18,14 @@ class rsMARL:
         self.moves = [[0, -1], [1, 0], [0, 1], [-1, 0]] #x y N E S O
         self.totalReward = 0
 
+        self.plan1 = plans[0]
+        self.plan2 = plans[1]
+
         self.start = start
 
         self.flagShape = flagShape
 
         self.initialQ = initialQ
-
-        self.runs = runs
-
-        self.rewards = [0.0]*runs
 
         """
         size = width, height
@@ -66,35 +64,37 @@ class rsMARL:
         self.firstDone = None
 
     def run(self):
-        Qas1 = [[[[self.initialQ]*4 for k in range(2**6)] for i in range(self.world.size[0])] for j in range(self.world.size[1])]
-        Qas2 = [[[[self.initialQ]*4 for k in range(2**6)] for i in range(self.world.size[0])] for j in range(self.world.size[1])]
+        Qas1 = [[[[[self.initialQ]*4 for h in range(len(self.plan1))] for k in range(2**6)] for i in range(self.world.size[0])] for j in range(self.world.size[1])]
+        Qas2 = [[[[[self.initialQ]*4 for h in range(len(self.plan2))] for k in range(2**6)] for i in range(self.world.size[0])] for j in range(self.world.size[1])]
         z = False
         
-        for run in range(self.runs):
+        for run in range(20000):
             self.reset()
             step = 0
-            action1 = choice(self.world.canMove(self.agent1))
-            action2 = choice(self.world.canMove(self.agent2))
             path1 = []
             path2 = []
             done1 = False
             done2 = False
             flagIndex1 = 0
             flagIndex2 = 0
+            planIndex1 = 0
+            planIndex2 = 0
+            action1, p1 = self.chooseAction(self.agent1, Qas1, 1, flagIndex1, planIndex1)
+            action2, p2 = self.chooseAction(self.agent2, Qas2, 2, flagIndex2, planIndex2)
             while not self.isDone() :
                 step += 1
 
                 if not self.world.isOnGoal(self.agent1) and not done1:
-                    self.agent1, Qas1, action1, p1, done1, flagIndex1 = self.runAgent(self.agent1, Qas1, path1, action1, 1, flagIndex1)
+                    self.agent1, Qas1, action1, p1, done1, flagIndex1, planIndex1 = self.runAgent(self.agent1, Qas1, path1, action1, 1, flagIndex1, planIndex1)
 
                 if not self.world.isOnGoal(self.agent2) and not done2:
-                    self.agent2, Qas2, action2, p2, done2, flagIndex2 = self.runAgent(self.agent2, Qas2, path2, action2, 2, flagIndex2)
+                    self.agent2, Qas2, action2, p2, done2, flagIndex2, planIndex2 = self.runAgent(self.agent2, Qas2, path2, action2, 2, flagIndex2, planIndex2)
 
                 if done1 and done2:
                     if self.firstDone == 1:
-                        self.agent1, Qas1, action1, p1, done1, flagIndex1 = self.finishEpisode(self.agent1, Qas1, path1, action1, 1, flagIndex1)
+                        self.agent1, Qas1, action1, p1, done1, flagIndex1, planIndex1 = self.runAgent(self.agent1, Qas1, path1, action1, 1, flagIndex1, planIndex1)
                     else:
-                        self.agent2, Qas2, action2, p2, done2, flagIndex2 = self.finishEpisode(self.agent2, Qas2, path2, action2, 2, flagIndex2)
+                        self.agent2, Qas2, action2, p2, done2, flagIndex2, planIndex2 = self.runAgent(self.agent2, Qas2, path2, action2, 2, flagIndex2, planIndex2)
                 
                 if step > 0:
                     x1, y1 = self.agent1
@@ -105,7 +105,7 @@ class rsMARL:
                         #print()
                     if not done2:
                         pass
-                        #print(run, step, (self.agent2, action2, flagIndex2), Qas2[y2][x2][flagIndex2], p2, self.printShit(self.agent2, 2))
+                        #print(run, step, (self.agent2, action2, flagIndex2, planIndex2), Qas2[y2][x2][flagIndex2][planIndex2], p2, self.printShit(self.agent2, 2))
                 
                 if step%100000 == 0:
                     print(step)
@@ -137,70 +137,74 @@ class rsMARL:
                 #                     print(list(map(int, Qas2[i][j])), end= " ")
                 #                 print("")
 
-            self.rewards[run] = self.getFinalReward()-step
             self.totalReward += self.getFinalReward()
-            #print (run, step, self.getFinalReward(), self.getFinalReward()-step, int(self.totalReward/(run+1)), self.world.flagsIndexToName(self.flagsGot1), self.world.flagsIndexToName(self.flagsGot2), int(self.phi(path1[-1][0], 1)), int(self.phi(path2[-1][0], 2)))
+            print (run, step, self.getFinalReward()-step, int(self.totalReward/(run+1)), self.world.flagsIndexToName(self.flagsGot1), self.world.flagsIndexToName(self.flagsGot2), int(self.phi(path1[-1][0], 1)), int(self.phi(path2[-1][0], 2)))
         #print(path2)
         #print(path1)
         #print(self.world.flagsIndexToName(self.flagsGot1))
         #print(self.world.flagsIndexToName(self.flagsGot2))
 
     def printShit(self, pos, agent):
-        return (self.getStepPlan(agent, pos, "Join"), self.world.roomsIndexToName(self.world.getCurrentRoom(pos)), self.world.flagsIndexToName(self.getFlagsGot(agent, pos)))
+        if agent == 1:
+            plan = self.plan1
+        else:
+            plan = self.plan2
+        return (self.getStepEasy(agent, pos, plan, False), self.world.roomsIndexToName(self.world.getCurrentRoom(pos)), self.world.flagsIndexToName(self.getFlagsGot(agent, pos)))
 
 
-    def runAgent(self, pos, Qas, path, action, agent, flagIndex):
+    def runAgent(self, pos, Qas, path, action, agent, flagIndex, planIndex):
         #action = self.chooseAction(pos[0], pos[1], Qas)
-        path.append((pos, action, flagIndex))
+        path.append((pos, action, flagIndex, planIndex))
         done = False
         nextPos = self.getNextPos(pos[0], pos[1], action)
 
         if self.world.isOnGoal(nextPos):
             if self.firstDone == None:
                 self.firstDone = agent
-                return pos, Qas, action, "", True, flagIndex
+                return pos, Qas, action, "", True, flagIndex, planIndex
             else:
                 done = True
 
         reward = self.getReward(nextPos)
 
-        sigma, nextAction, p, nextFlagIndex = self.getSigma(reward, nextPos, pos, action, Qas, agent, flagIndex)
+        sigma, nextAction, p, nextFlagIndex, nextPlanIndex = self.getSigma(reward, nextPos, pos, action, Qas, agent, flagIndex, planIndex)
         Qas = self.updateEligibilityTrace(path, sigma, Qas)
 
         self.checkFlags(nextPos, agent)
-        return nextPos, Qas, nextAction, p, done, nextFlagIndex
+        return nextPos, Qas, nextAction, p, done, nextFlagIndex, nextPlanIndex
 
-    def finishEpisode(self, pos, Qas, path, action, agent, flagIndex):
-        #action = self.chooseAction(pos[0], pos[1], Qas)
-        path.append((pos, action, flagIndex))
+    def finishEpisode(self, pos, Qas, path, action, agent, flagIndex, planIndex):
+        path.append((pos, action, flagIndex, planIndex))
+        done = True
         nextPos = self.getNextPos(pos[0], pos[1], action)
+
         reward = self.getReward(nextPos)
 
-        sigma, nextAction, p, nextFlagIndex = self.getSigma(reward, nextPos, pos, action, Qas, agent, flagIndex)
+        sigma, nextAction, p, nextFlagIndex, nextPlanIndex = self.getSigma(reward, nextPos, pos, action, Qas, agent, flagIndex, planIndex)
         Qas = self.updateEligibilityTrace(path, sigma, Qas)
 
         self.checkFlags(nextPos, agent)
-        return nextPos, Qas, nextAction, p, True, nextFlagIndex
+        return nextPos, Qas, nextAction, p, done, nextFlagIndex, nextPlanIndex
 
 
     def probability(self, p):
         return random() < p
 
-    def chooseAction(self, pos, Qas, agent, flagsIndex):
+    def chooseAction(self, pos, Qas, agent, flagsIndex, planIndex):
         availableMoves = self.world.canMove(pos)
         if self.probability(self.epsilon):
             return choice(availableMoves), "random"
         else:
-            maxValue, moves = self.computeMax(pos, availableMoves, Qas, flagsIndex)
+            maxValue, moves = self.computeMax(pos, availableMoves, Qas, flagsIndex, planIndex)
             return choice(moves), "greedy"
 
-    def computeMax(self, pos, moves, Qas, flagsIndex):
+    def computeMax(self, pos, moves, Qas, flagsIndex, planIndex):
         x = pos[0]
         y = pos[1]
         res = -9999999999999999999
         best = []
         for i in range(len(moves)):
-            current = Qas[y][x][flagsIndex][moves[i]]
+            current = Qas[y][x][flagsIndex][planIndex][moves[i]]
             if current > res:
                 res = current
                 best = [moves[i]]
@@ -226,25 +230,32 @@ class rsMARL:
         #(0.99*0.4)**805 = 0.0
         size = len(path)
         for i in range (size-1, size-cells-1, -1):
-            pos, a, flagsIndex = path[i]
+            pos, a, flagsIndex, planIndex = path[i]
             x, y = pos
-            Qas[y][x][flagsIndex][a] += self.alpha*sigma*(self.gamma * self.lambd)**(size -1 - i)
+            Qas[y][x][flagsIndex][planIndex][a] += self.alpha*sigma*(self.gamma * self.lambd)**(size -1 - i)
 
         return Qas
         
                 
-    def getSigma(self, reward, nextPos, currentPos, action, Qas, agent, flagIndex):
-        originalQ = Qas[currentPos[1]][currentPos[0]][flagIndex][action]
+    def getSigma(self, reward, nextPos, currentPos, action, Qas, agent, flagIndex, planIndex):
+        originalQ = Qas[currentPos[1]][currentPos[0]][flagIndex][planIndex][action]
+
+        if agent == 1:
+            plan = self.plan1
+        else:
+            plan = self.plan2
 
         nextFlagIndex = self.testFlagsIndex(nextPos, agent)
+        nextPlanIndex = self.getStepEasy(agent, nextPos, plan, False)
 
-        nextAction, p = self.chooseAction(nextPos, Qas, agent, nextFlagIndex)
+        nextAction, p = self.chooseAction(nextPos, Qas, agent, nextFlagIndex, nextPlanIndex)
 
-        nextQ = Qas[nextPos[1]][nextPos[0]][nextFlagIndex][nextAction]
+        nextQ = Qas[nextPos[1]][nextPos[0]][nextFlagIndex][nextPlanIndex][nextAction]
+        rS = self.rewardShaping(currentPos, nextPos, agent)
         sigma = \
-            reward + (self.gamma*nextQ) - originalQ + self.rewardShaping(currentPos, nextPos, agent)
+            reward + (self.gamma*nextQ) - originalQ + rS
 
-        return sigma, nextAction, p, nextFlagIndex
+        return sigma, nextAction, p, nextFlagIndex, nextPlanIndex
 
 
     def checkFlags(self, pos, agent):
@@ -289,6 +300,7 @@ class rsMARL:
         currentPhi = self.phi(currentPos, agent)
         nextPhi = self.phi(nextPos, agent) #that order
         a = self.gamma*nextPhi-currentPhi
+        #print(a, self.phi(nextPos, agent), self.getFlagsGot(agent, nextPos))
         return a
 
     def phi(self, pos, agent):
@@ -296,12 +308,70 @@ class rsMARL:
         
         if self.world.isOnGoal(pos):
             return 0
-        elif not self.flagShape:
-            return 0
+        elif self.flagShape:
+            if agent == 1:
+                plan = self.plan1
+            else:
+                plan = self.plan2
+            omega = maxReward/(len(plan)-1+len(self.goalReached))
+            return omega*(self.getStepEasy(agent, pos, plan, True) + self.testFlags(pos, agent))
+
         else:
-            #omega = len(self.flags)*100.0/len(self.flags)
-            omega = 100
-            return omega*self.testFlags(pos, agent)
+            if agent == 1:
+                plan = self.plan1
+            else:
+                plan = self.plan2
+            omega = maxReward/(len(plan)-1)
+            return omega*(self.getStepEasy(agent, pos, plan, True))
+            
+
+    def getStep(self, room, flags, plan):
+        step = None
+        for i in range(len(plan)):
+            if plan[i][0] == room:
+                flagsRequired = plan[i][1:]
+                if self.compareUnordered(flagsRequired,flags):
+        #        if flagsRequired==flags:# Je ne sais pas lequel choisir TODO
+                    step = i
+        return step
+
+
+            
+    def getStepEasy(self, agent, pos, plan, setLastStep):
+        if agent == 1:
+            lastStep = self.lastStep1
+        else:
+            lastStep = self.lastStep2
+        room = self.world.getCurrentRoom(pos)
+        flags = self.getFlagsGot(agent, pos)
+        step = self.getStep(room, flags, plan)
+
+        if step == None:
+            step = lastStep
+        if step > lastStep and setLastStep:
+            if agent == 1:
+                self.lastStep1 = step
+            else:
+                self.lastStep2 = step
+        if step < lastStep:
+            step = lastStep
+        return step
+
+    def getFlagsGot(self, agent, pos):
+        if agent == 1:
+            res = list(self.flagsGot1)
+        else:
+            res = list(self.flagsGot2)
+        if pos in self.world.flags:
+            f = self.world.flags.index(pos)
+            if not self.goalReached[f]:
+                res.append(f)
+        return res
+
+    def compareUnordered(self, a, b):
+        a = sorted(a) 
+        b = sorted(b)
+        return a == b
 
 if __name__ == '__main__':
 
@@ -310,27 +380,14 @@ if __name__ == '__main__':
 
     w = World(size, goal, doors, flags, world, flagsNames, roomsNames)
 
+
     epsilon = 0.1
     gamma = 0.99
     alpha = 0.1
     lambd = 0.4
-
-
-    nbSimulation = 10
-
+    planJoin = (plan1Join, plan2Join)
+    planSolo = (plan1Solo, plan2Solo)
     flagShape = False
-    initialQ = 0.0
-    runs = 2000
-
-
-    rewardsNoShape = [0.0]*runs
-
-    for i in range(nbSimulation):
-        print(i)
-        marl = rsMARL(w, epsilon, gamma, alpha, lambd, start, flagShape, initialQ, runs)
-        marl.run()
-        rewardsNoShape = np.add(rewardsNoShape, marl.rewards)
-
-    for i in range(runs):
-        rewardsNoShape[i] /= (nbSimulation)
-        print(rewardsNoShape[i])
+    intialQ = 0.0
+    marl = rsMARL(w, epsilon, gamma, alpha, lambd, start, planSolo, flagShape, intialQ)
+    marl.run()
