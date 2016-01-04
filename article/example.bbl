@@ -1,0 +1,25 @@
+\begin{thebibliography}{}
+
+\bibitem[Andrew Y.~Ng and Russell, 1999]{rs2}
+Andrew Y.~Ng, D.~H. and Russell, S.~J. (1999).
+\newblock Policy invariance under reward transformations : Theory and
+  application to reward shaping.
+\newblock {\em ICML '99 Proceedings of the Sixteenth International Conference
+  on Machine Learning}, pages 278--287.
+
+\bibitem[Devlin and Kudenko, 2004]{paper4}
+Devlin, S. and Kudenko, D. (2004).
+\newblock Plan-based reward shaping for multi-agent reinforcement learning.
+\newblock {\em The Knowledge Engineering Review}, 00:1--24.
+
+\bibitem[Grzes and Kudenko, 2011]{rs}
+Grzes, M. and Kudenko, D. (2011).
+\newblock {\em Reward Shaping and Mixed Resolution Function Approximation}.
+\newblock IGI Global.
+
+\bibitem[Singh and Sutton, 1996]{etrace}
+Singh, S.~P. and Sutton, R.~S. (1996).
+\newblock Reinforcement learning with replacing eligibility traces.
+\newblock {\em Machine Learning}, 22:123--158.
+
+\end{thebibliography}

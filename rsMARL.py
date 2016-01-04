@@ -4,6 +4,10 @@ from world import World
 from worldParser import parse
 import numpy as np
 
+
+import matplotlib.pyplot as plt
+plt.style.use('bmh')
+
 shapeDic = {"None":0, "Flag":1, "Solo":2, "Join":3, "Flag+Solo":4, "Flag+Join":5}
 
 class rsMARL:
@@ -171,7 +175,6 @@ class rsMARL:
         return nextPos, Qas, nextAction, p, done, nextFlagIndex
 
     def finishEpisode(self, pos, Qas, path, action, agent, flagIndex):
-        #action = self.chooseAction(pos[0], pos[1], Qas)
         path.append((pos, action, flagIndex))
         nextPos = self.getNextPos(pos[0], pos[1], action)
         reward = self.getReward(nextPos)
@@ -239,7 +242,6 @@ class rsMARL:
         nextFlagIndex = self.testFlagsIndex(nextPos, agent)
 
         nextAction, p = self.chooseAction(nextPos, Qas, agent, nextFlagIndex)
-
         nextQ = Qas[nextPos[1]][nextPos[0]][nextFlagIndex][nextAction]
         sigma = \
             reward + (self.gamma*nextQ) - originalQ + self.rewardShaping(currentPos, nextPos, agent)
