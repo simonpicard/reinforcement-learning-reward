@@ -207,7 +207,8 @@ class rsMARL:
             return choice(availableMoves), "random"
         else:
             maxValue, moves = self.computeMax(pos, availableMoves, Qas, flagsIndex)
-            return choice(moves), "greedy"
+            ret = choice(moves)
+            return ret, "greedy"
 
     def computeMax(self, pos, moves, Qas, flagsIndex):
         x = pos[0]
@@ -246,7 +247,7 @@ class rsMARL:
 
     def updateEligibilityTrace(self, path, sigma, Qas):
         #size = min (len(path), 56)
-        cells = min(len(path), 20)
+        cells = min(len(path), 1)
         #(0.99*0.4)**805 = 0.0
         size = len(path)
         for i in range (size-1, size-cells-1, -1):
@@ -366,5 +367,5 @@ if __name__ == '__main__':
 
     for i in range(1):
         print(i)
-        marl = rsMARL(w, epsilon, gamma, alpha, lambd, start, True, 600.0, runs, False)
+        marl = rsMARL(w, epsilon, gamma, alpha, lambd, start, False, 600.0, runs, False)
         marl.run()
