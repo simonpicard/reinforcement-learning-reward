@@ -127,18 +127,18 @@ RoomA
 RoomA A
 HallA A
 HallB A
-RoomC A
-RoomC A C
-RoomE A C
-RoomE A C E
-RoomC A C E
-HallB A C E
-RoomB A C E
-RoomB A C E B
-HallB A C E B
-HallA A C E B
-RoomD A C E B
-RoomD A C E B D
+RoomB A
+RoomB A B
+HallB A B
+RoomC A B
+RoomC A B C
+RoomE A B C
+RoomE A B C E
+RoomC A B C E
+HallB A B C E
+HallA A B C E
+RoomD A B C E
+RoomD A B C E D
 12
 RoomE
 RoomE F
@@ -158,24 +158,22 @@ RoomA
 RoomA A
 HallA A
 HallB A
-RoomC A
-RoomC A C
-HallB A C
-RoomB A C
-RoomB A C B
-HallB A C B
-HallA A C B
-RoomD A C B
-RoomD A C B D
-11
+RoomB A
+RoomB A B
+HallB A B
+RoomC A B
+RoomC A B C
+HallB A B C
+HallA A B C
+RoomD A B C
+RoomD A B C D
+9
 RoomE
 RoomE F
 RoomE F E
 RoomC F E
-HallB F E
-RoomB F E
-RoomB F E B
-HallB F E B
-HallA F E B
-RoomD F E B
-RoomD F E B D
+RoomC F E C
+HallB F E C
+HallA F E C
+RoomD F E C
+RoomD F E C D

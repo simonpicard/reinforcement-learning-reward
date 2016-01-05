@@ -22,35 +22,21 @@ planSolo6 = (plan1Solo6, plan2Solo6)
 planSolo5 = (plan1Solo5, plan2Solo5)
 planSolo4 = (plan1Solo4, plan2Solo4)
 
-nbSimulation = 5
+nbSimulation = 10
 
 #initial result
 
 initialQ = 0.0
 runs = 2000
-competitive = False
+coop = False
 
-#rsMARL.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, False, initialQ, runs, "txt/initial/no-shaping.txt", competitive)
-#rsMARL.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, True, initialQ, runs, "txt/initial/flag-based.txt", competitive)
+rsMARL.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, False, initialQ, runs, "txt/initial/no-shaping.txt", coop)
+rsMARL.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, True, initialQ, runs, "txt/initial/flag-based.txt", coop)
 
-rsMARLPlan.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, planJoin, False, initialQ, runs, "txt/initial/joint-plan-based.txt", competitive)
-rsMARLPlan.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, planSolo, False, initialQ, runs, "txt/initial/individual-plan-based.txt", competitive)
-rsMARLPlan.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, planJoin, True, initialQ, runs, "txt/initial/flag+joint-plan.txt", competitive)
-rsMARLPlan.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, planSolo, True, initialQ, runs, "txt/initial/flag+individual-plan.txt", competitive)
-"""
-#competitive reward
-
-initialQ = 0.0
-runs = 2000
-competitive = True
-
-rsMARL.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, False, initialQ, runs, "txt/competitive/no-shaping.txt", competitive)
-rsMARL.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, True, initialQ, runs, "txt/competitive/flag-based.txt", competitive)
-
-rsMARLPlan.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, planJoin, False, initialQ, runs, "txt/competitive/joint-plan-based.txt", competitive)
-rsMARLPlan.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, planSolo, False, initialQ, runs, "txt/competitive/individual-plan-based.txt", competitive)
-rsMARLPlan.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, planJoin, True, initialQ, runs, "txt/competitive/flag+joint-plan.txt", competitive)
-rsMARLPlan.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, planSolo, True, initialQ, runs, "txt/competitive/flag+individual-plan.txt", competitive)
+rsMARLPlan.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, planJoin, False, initialQ, runs, "txt/initial/joint-plan-based.txt", coop)
+rsMARLPlan.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, planSolo, False, initialQ, runs, "txt/initial/individual-plan-based.txt", coop)
+rsMARLPlan.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, planJoin, True, initialQ, runs, "txt/initial/flag+joint-plan.txt", coop)
+rsMARLPlan.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, planSolo, True, initialQ, runs, "txt/initial/flag+individual-plan.txt", coop)
 
 
 
@@ -58,13 +44,26 @@ rsMARLPlan.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, planSolo
 
 initialQ = 0.0
 runs = 2000
-competitive = False
+coop = False
 
-rsMARL.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, False, initialQ, runs, "txt/knowledgePessimistic/no-shaping.txt", competitive)
+rsMARL.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, False, initialQ, runs, "txt/knowledgePessimistic/no-shaping.txt", coop)
 
-rsMARLPlan.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, planJoin, False, initialQ, runs, "txt/knowledgePessimistic/joint-plan-based.txt", competitive)
-rsMARLPlan.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, planSolo, False, initialQ, runs, "txt/knowledgePessimistic/individual-plan-based.txt", competitive)
-rsMARLPlan.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, planSolo4, False, initialQ, runs, "txt/knowledgePessimistic/plan-based-4.txt", competitive)
-rsMARLPlan.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, planSolo5, False, initialQ, runs, "txt/knowledgePessimistic/plan-based-5.txt", competitive)
-rsMARLPlan.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, planSolo6, False, initialQ, runs, "txt/knowledgePessimistic/plan-based-6.txt", competitive)
-"""
+rsMARLPlan.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, planJoin, False, initialQ, runs, "txt/knowledgePessimistic/joint-plan-based.txt", coop)
+rsMARLPlan.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, planSolo, False, initialQ, runs, "txt/knowledgePessimistic/individual-plan-based.txt", coop)
+rsMARLPlan.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, planSolo4, False, initialQ, runs, "txt/knowledgePessimistic/plan-based-4.txt", coop)
+rsMARLPlan.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, planSolo5, False, initialQ, runs, "txt/knowledgePessimistic/plan-based-5.txt", coop)
+rsMARLPlan.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, planSolo6, False, initialQ, runs, "txt/knowledgePessimistic/plan-based-6.txt", coop)
+
+#cooperation
+
+initialQ = 0.0
+runs = 2000
+coop = True
+
+rsMARL.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, False, initialQ, runs, "txt/coop/no-shaping.txt", coop)
+rsMARL.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, True, initialQ, runs, "txt/coop/flag-based.txt", coop)
+
+rsMARLPlan.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, planJoin, False, initialQ, runs, "txt/coop/joint-plan-based.txt", coop)
+rsMARLPlan.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, planSolo, False, initialQ, runs, "txt/coop/individual-plan-based.txt", coop)
+rsMARLPlan.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, planJoin, True, initialQ, runs, "txt/coop/flag+joint-plan.txt", coop)
+rsMARLPlan.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, planSolo, True, initialQ, runs, "txt/coop/flag+individual-plan.txt", coop)

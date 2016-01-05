@@ -8,7 +8,7 @@ from handlePlot import *
 shapeDic = {"None":0, "Flag":1, "Solo":2, "Join":3, "Flag+Solo":4, "Flag+Join":5}
 
 class rsMARL:
-    def __init__(self, w, epsilon, gamma, alpha, lambd, start, plans, flagShape, initialQ, runs, competitive):
+    def __init__(self, w, epsilon, gamma, alpha, lambd, start, plans, flagShape, initialQ, runs, coop):
         
         self.world = w
 
@@ -32,7 +32,9 @@ class rsMARL:
 
         self.rewards = [0.0]*runs
 
-        self.competitive = competitive
+        self.competitive = False
+
+        self.coop = coop
 
         """
         size = width, height
@@ -66,6 +68,8 @@ class rsMARL:
         self.goalReached2 = [False]*len(self.world.flags)
         self.flagsGot1 = []
         self.flagsGot2 = []
+        self.lel1 = []
+        self.lel2 = []
         self.lastStep1 = 0
         self.lastStep2 = 0
         self.firstDone = None
@@ -110,9 +114,9 @@ class rsMARL:
 
                 if done1 and done2:
                     if self.firstDone == 1:
-                        self.agent1, Qas1, action1, p1, done1, flagIndex1, planIndex1, path1 = self.runAgent(self.agent1, Qas1, path1, action1, 1, flagIndex1, planIndex1)
+                        self.agent1, Qas1, action1, p1, done1, flagIndex1, planIndex1, path1 = self.finishEpisode(self.agent1, Qas1, path1, action1, 1, flagIndex1, planIndex1)
                     else:
-                        self.agent2, Qas2, action2, p2, done2, flagIndex2, planIndex2, path2 = self.runAgent(self.agent2, Qas2, path2, action2, 2, flagIndex2, planIndex2)
+                        self.agent2, Qas2, action2, p2, done2, flagIndex2, planIndex2, path2 = self.finishEpisode(self.agent2, Qas2, path2, action2, 2, flagIndex2, planIndex2)
                 
                 if step > 20000:
                     print("Quitted")
@@ -120,11 +124,10 @@ class rsMARL:
                     break
 
             if False:
-                self.rewards[run] = 0
+                self.rewards[run] = self.rewards[run-1]
             else:
                 self.rewards[run] = self.getTotalReward()*(self.gamma**step)
-            if run%100 == 0:
-                print (run, step, self.getTotalReward(), self.getTotalReward()*(self.gamma**step), self.world.flagsIndexToName(self.flagsGot1), self.world.flagsIndexToName(self.flagsGot2), int(self.phi(path1[-1][0], 1)), int(self.phi(path2[-1][0], 2)))
+            print (run, step, self.getTotalReward(), self.getTotalReward()*(self.gamma**step), self.world.flagsIndexToName(self.lel1), self.world.flagsIndexToName(self.lel2), int(self.phi(path1[-1][0], 1)), int(self.phi(path2[-1][0], 2)))
         """for a in range(len(Qas1)):
             for b in range(len(Qas1[a])):
                 for c in range(len(Qas1[a][b])):
@@ -238,7 +241,7 @@ class rsMARL:
 
     def updateEligibilityTrace(self, path, sigma, Qas):
         #size = min (len(path), 56)
-        cells = min(len(path), 20)
+        cells = min(len(path), 56)
         #(0.99*0.4)**805 = 0.0
         size = len(path)
         for i in range (size-1, size-cells-1, -1):
@@ -271,19 +274,40 @@ class rsMARL:
 
 
     def checkFlags(self, pos, agent):
-        flag = None
-        if pos in self.world.flags:
-            flag = self.world.flags.index(pos)
-        else:
-            return
-        if not self.goalReached[flag]:
-            self.goalReached[flag] = True
-            if agent == 1 :
-                self.flagsGot1.append(flag)
-                self.goalReached1[flag] = True
+        if self.coop == False:
+            flag = None
+            if pos in self.world.flags:
+                flag = self.world.flags.index(pos)
             else:
-                self.flagsGot2.append(flag)
-                self.goalReached2[flag] = True
+                return
+            if not self.goalReached[flag]:
+                self.goalReached[flag] = True
+                if agent == 1 :
+                    self.flagsGot1.append(flag)
+                    self.goalReached1[flag] = True
+                else:
+                    self.flagsGot2.append(flag)
+                    self.goalReached2[flag] = True
+        else:
+            flag = None
+            if pos in self.world.flags:
+                flag = self.world.flags.index(pos)
+            else:
+                return
+            if not self.goalReached[flag]:
+                self.goalReached[flag] = True
+                if agent == 1 :
+                    self.lel1.append(flag)
+                    self.flagsGot1.append(flag)
+                    self.flagsGot2.append(flag)
+                    self.goalReached1[flag] = True
+                    self.goalReached2[flag] = True
+                else:
+                    self.lel2.append(flag)
+                    self.flagsGot2.append(flag)
+                    self.flagsGot1.append(flag)
+                    self.goalReached2[flag] = True
+                    self.goalReached1[flag] = True
 
     def testFlags(self, pos, agent):
         if agent == 1:
@@ -435,7 +459,7 @@ if __name__ == '__main__':
     runs = 2000
 
 
-    marl = rsMARL(w, epsilon, gamma, alpha, lambd, start, planSolo, False, 0.0, 2000, False)
+    marl = rsMARL(w, epsilon, gamma, alpha, lambd, start, planSolo, False, 0.0, 2000, True)
     marl.run()
 
 

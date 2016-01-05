@@ -59,4 +59,4 @@ def readAndPlot(xLabel, yLabel, title, fOut, files):
 
 if __name__ == "__main__":
 
-    readAndPlot("(#*100) Episodes", "Total discounted reward", "Initial results", "initial.png", ['txt/initial/no-shaping.txt', 'txt/initial/flag-based.txt', 'txt/initial/joint-plan-based.txt', 'txt/initial/individual-plan-based.txt'])
+    readAndPlot("(#*100) Episodes", "Total discounted reward", "Initial results", "initial1.png", ['txt/initial1/joint-plan-based.txt', 'txt/initial1/individual-plan-based.txt'])
