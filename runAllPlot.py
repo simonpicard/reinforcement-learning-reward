@@ -22,8 +22,7 @@ planSolo6 = (plan1Solo6, plan2Solo6)
 planSolo5 = (plan1Solo5, plan2Solo5)
 planSolo4 = (plan1Solo4, plan2Solo4)
 
-nbSimulation = 30
-nbSimulation = 1
+nbSimulation = 5
 
 #initial result
 
@@ -38,7 +37,7 @@ rsMARLPlan.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, planJoin
 rsMARLPlan.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, planSolo, False, initialQ, runs, "txt/initial/individual-plan-based.txt", competitive)
 rsMARLPlan.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, planJoin, True, initialQ, runs, "txt/initial/flag+joint-plan.txt", competitive)
 rsMARLPlan.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, planSolo, True, initialQ, runs, "txt/initial/flag+individual-plan.txt", competitive)
-
+"""
 #competitive reward
 
 initialQ = 0.0
@@ -101,3 +100,4 @@ rsMARLPlan.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, planSolo
 rsMARLPlan.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, planSolo4, False, initialQ, runs, "txt/knowledgePessimistic/plan-based-4.txt", competitive)
 rsMARLPlan.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, planSolo5, False, initialQ, runs, "txt/knowledgePessimistic/plan-based-5.txt", competitive)
 rsMARLPlan.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, planSolo6, False, initialQ, runs, "txt/knowledgePessimistic/plan-based-6.txt", competitive)
+"""
