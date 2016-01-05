@@ -120,12 +120,12 @@ class rsMARL:
                     quitted = True
                     break
 
-            if quitted:
+            if False:
                 self.rewards[run] = 0
             else:
                 self.rewards[run] = self.getTotalReward()*(self.gamma**step)
-            print (run, step, self.getTotalReward(), self.getTotalReward()*(self.gamma**step), self.world.flagsIndexToName(self.flagsGot1), self.world.flagsIndexToName(self.flagsGot2), int(self.phi(path1[-1][0], 1)), int(self.phi(path2[-1][0], 2)))
-        for a in range(len(Qas1)):
+            #print (run, step, self.getTotalReward(), self.getTotalReward()*(self.gamma**step), self.world.flagsIndexToName(self.flagsGot1), self.world.flagsIndexToName(self.flagsGot2), int(self.phi(path1[-1][0], 1)), int(self.phi(path2[-1][0], 2)))
+        """for a in range(len(Qas1)):
             for b in range(len(Qas1[a])):
                 for c in range(len(Qas1[a][b])):
                     for d in range(len(Qas1[a][b][c])):
@@ -139,7 +139,7 @@ class rsMARL:
                     for d in range(len(Qas2[a][b][c])):
                         for e in range(len(Qas2[a][b][c][d])):
                             if Qas2[a][b][c][d][e] > 600:
-                                print(Qas2[a][b][c][d][e], a, b, c, d, e)
+                                print(Qas2[a][b][c][d][e], a, b, c, d, e)"""
 
     def printShit(self, pos, agent):
         if agent == 1:
