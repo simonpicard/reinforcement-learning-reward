@@ -80,8 +80,14 @@ class rsMARL:
         for run in range(self.runs):
             self.reset()
             step = 0
+            done1 = False
+            done2 = False
+            self.done1 = done1
+            self.done2 = done2
             action1 = choice(self.world.canMove(self.agent1))
             action2 = choice(self.world.canMove(self.agent2))
+            self.action2 = action2
+            self.action1 = action1
             path1 = []
             path2 = []
             done1 = False
@@ -94,9 +100,13 @@ class rsMARL:
 
                 if not self.world.isOnGoal(self.agent1) and not done1:
                     self.agent1, Qas1, action1, p1, done1, flagIndex1 = self.runAgent(self.agent1, Qas1, path1, action1, 1, flagIndex1)
+                    self.action1 = action1
+                    self.done1 = done1
 
                 if not self.world.isOnGoal(self.agent2) and not done2:
                     self.agent2, Qas2, action2, p2, done2, flagIndex2 = self.runAgent(self.agent2, Qas2, path2, action2, 2, flagIndex2)
+                    self.action2 = action2
+                    self.done2 = done2
 
                 if done1 and done2:
                     if self.firstDone == 1:
@@ -139,8 +149,8 @@ class rsMARL:
             if quitted:
                 self.rewards[run] = 0
             else:
-                self.rewards[run] = self.getTotalReward()-step
-            #print (run, step, self.getFinalReward(), self.getFinalReward()-step, int(self.totalReward/(run+1)), self.world.flagsIndexToName(self.flagsGot1), self.world.flagsIndexToName(self.flagsGot2), int(self.phi(path1[-1][0], 1)), int(self.phi(path2[-1][0], 2)))
+                self.rewards[run] = self.getTotalReward()*(self.gamma**step)
+            print (run, step, self.getTotalReward(), self.getTotalReward()*(self.gamma**step), self.world.flagsIndexToName(self.flagsGot1), self.world.flagsIndexToName(self.flagsGot2), int(self.phi(path1[-1][0], 1)), int(self.phi(path2[-1][0], 2)))
         #print(path2)
         #print(path1)
         #print(self.world.flagsIndexToName(self.flagsGot1))
@@ -187,7 +197,12 @@ class rsMARL:
         return random() < p
 
     def chooseAction(self, pos, Qas, agent, flagsIndex):
-        availableMoves = self.world.canMove(pos)
+        posToAvoid = []
+        if agent == 1 and not self.done2:
+            posToAvoid.append(self.getNextPos(self.agent2[0], self.agent2[1], self.action2))
+        elif agent == 2 and not self.done1:
+            posToAvoid.append(self.getNextPos(self.agent1[0], self.agent1[1], self.action1))
+        availableMoves = self.world.canMoveAvoid(pos, posToAvoid)
         if self.probability(self.epsilon):
             return choice(availableMoves), "random"
         else:
@@ -349,5 +364,7 @@ if __name__ == '__main__':
     initialQ = 0.0
     runs = 2000
 
-
-    runFor(1, w, epsilon, gamma, alpha, lambd, start, True, initialQ, runs, "txt/initial/flag-based2.txt", False)
+    for i in range(1):
+        print(i)
+        marl = rsMARL(w, epsilon, gamma, alpha, lambd, start, True, 600.0, runs, False)
+        marl.run()

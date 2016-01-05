@@ -10,7 +10,7 @@ class World:
 
         self.moves = [[0, -1], [1, 0], [0, 1], [-1, 0]] #x y N E S O
 
-    def canMoveAvoid(self, pos, lastAction):
+    def canMoveAvoid(self, pos, posToAvoid):
         x = pos[0]
         y = pos[1]
         availablePoses = []
@@ -28,9 +28,13 @@ class World:
                 elif self.hasDoor([x, y], potentialPoses[i]):
                     availableMoves.append(potentialMoves[i])
                     availablePoses.append(potentialPoses[i])
-        actionToAvoid = (lastAction + 2) %4
-        if actionToAvoid in availableMoves:
-            availableMoves.pop(availableMoves.index(actionToAvoid))
+
+        for p in posToAvoid:
+            if p in availablePoses:
+                i = availablePoses.index(p)
+                availableMoves.pop(i)
+                availablePoses.pop(i)
+
         return availableMoves
 
     def canMove(self, pos):

@@ -82,68 +82,64 @@ class rsMARL:
             path2 = []
             done1 = False
             done2 = False
+            self.done1 = done1
+            self.done2 = done2
             flagIndex1 = 0
             flagIndex2 = 0
             planIndex1 = 0
             planIndex2 = 0
-            quitted = False
+            self.action2 = 0
+            self.action1 = 0
             action1, p1 = self.chooseAction(self.agent1, Qas1, 1, flagIndex1, planIndex1)
             action2, p2 = self.chooseAction(self.agent2, Qas2, 2, flagIndex2, planIndex2)
+            self.action2 = action2
+            self.action1 = action1
+            quitted = False
             while not self.isDone() :
                 step += 1
+                self.epsilon = run*1.0/self.runs
 
                 if not self.world.isOnGoal(self.agent1) and not done1:
-                    self.agent1, Qas1, action1, p1, done1, flagIndex1, planIndex1 = self.runAgent(self.agent1, Qas1, path1, action1, 1, flagIndex1, planIndex1)
+                    self.agent1, Qas1, action1, p1, done1, flagIndex1, planIndex1, path1 = self.runAgent(self.agent1, Qas1, path1, action1, 1, flagIndex1, planIndex1)
+                    self.action1 = action1
+                    self.done1 = done1
 
                 if not self.world.isOnGoal(self.agent2) and not done2:
-                    self.agent2, Qas2, action2, p2, done2, flagIndex2, planIndex2 = self.runAgent(self.agent2, Qas2, path2, action2, 2, flagIndex2, planIndex2)
+                    self.agent2, Qas2, action2, p2, done2, flagIndex2, planIndex2, path2 = self.runAgent(self.agent2, Qas2, path2, action2, 2, flagIndex2, planIndex2)
+                    self.action2 = action2
+                    self.done2 = done2
 
                 if done1 and done2:
                     if self.firstDone == 1:
-                        self.agent1, Qas1, action1, p1, done1, flagIndex1, planIndex1 = self.runAgent(self.agent1, Qas1, path1, action1, 1, flagIndex1, planIndex1)
+                        self.agent1, Qas1, action1, p1, done1, flagIndex1, planIndex1, path1 = self.runAgent(self.agent1, Qas1, path1, action1, 1, flagIndex1, planIndex1)
                     else:
-                        self.agent2, Qas2, action2, p2, done2, flagIndex2, planIndex2 = self.runAgent(self.agent2, Qas2, path2, action2, 2, flagIndex2, planIndex2)
+                        self.agent2, Qas2, action2, p2, done2, flagIndex2, planIndex2, path2 = self.runAgent(self.agent2, Qas2, path2, action2, 2, flagIndex2, planIndex2)
                 
                 if step > 20000:
                     print("Quitted")
                     quitted = True
                     break
-                
-
-                # if step%100 == 0:
-                #     if self.shape == "Solo" or self.shape == "Join":
-                #         print(step, self.world.isOnGoal(self.agent1), self.world.isOnGoal(self.agent2), self.getStepPlan(1, self.agent1, self.shape), self.getStepPlan(2, self.agent2, self.shape))
-                #     else:
-                #         print(step, done1, done2)
-                # #print (self.agent2)
-                # if step > 10000 and not z:
-                #     a = input("What to do")
-                #     if a == "e":
-                #         z = True
-                #         pass
-                #     else:
-                #         print("ok")
-                #         if not self.world.isOnGoal(self.agent1):
-                #             print(self.agent1, self.world.canMove(self.agent1), Qas1[self.agent1[1]][self.agent1[0]], action1, p1, self.testFlags([0,0],1))
-                #             for i in range(len(Qas1)):
-                #                 for j in range(len(Qas1[i])):
-                #                     print(list(map(int, Qas1[i][j])), end= " ")
-                #                 print("")
-                #         if not self.world.isOnGoal(self.agent2):
-                #             print(self.agent2, self.world.canMove(self.agent2), Qas2[self.agent2[1]][self.agent2[0]], action2, p2, self.testFlags([0,0],2))
-                #             for i in range(len(Qas2)):
-                #                 for j in range(len(Qas2[i])):
-                #                     print(list(map(int, Qas2[i][j])), end= " ")
-                #                 print("")
 
             if quitted:
                 self.rewards[run] = 0
             else:
-                self.rewards[run] = self.getTotalReward()-step
-        #print(path2)
-        #print(path1)
-        #print(self.world.flagsIndexToName(self.flagsGot1))
-        #print(self.world.flagsIndexToName(self.flagsGot2))
+                self.rewards[run] = self.getTotalReward()*(self.gamma**step)
+            print (run, step, self.getTotalReward(), self.getTotalReward()*(self.gamma**step), self.world.flagsIndexToName(self.flagsGot1), self.world.flagsIndexToName(self.flagsGot2), int(self.phi(path1[-1][0], 1)), int(self.phi(path2[-1][0], 2)))
+        for a in range(len(Qas1)):
+            for b in range(len(Qas1[a])):
+                for c in range(len(Qas1[a][b])):
+                    for d in range(len(Qas1[a][b][c])):
+                        for e in range(len(Qas1[a][b][c][d])):
+                            if Qas1[a][b][c][d][e] > 600:
+                                print(Qas1[a][b][c][d][e], a, b, c, d, e)
+        print("-----------------")
+        for a in range(len(Qas2)):
+            for b in range(len(Qas2[a])):
+                for c in range(len(Qas2[a][b])):
+                    for d in range(len(Qas2[a][b][c])):
+                        for e in range(len(Qas2[a][b][c][d])):
+                            if Qas2[a][b][c][d][e] > 600:
+                                print(Qas2[a][b][c][d][e], a, b, c, d, e)
 
     def printShit(self, pos, agent):
         if agent == 1:
@@ -162,7 +158,8 @@ class rsMARL:
         if self.world.isOnGoal(nextPos):
             if self.firstDone == None:
                 self.firstDone = agent
-                return pos, Qas, action, "", True, flagIndex, planIndex
+                path.pop()
+                return pos, Qas, action, "", True, flagIndex, planIndex, path
             else:
                 done = True
 
@@ -172,7 +169,7 @@ class rsMARL:
         Qas = self.updateEligibilityTrace(path, sigma, Qas)
 
         self.checkFlags(nextPos, agent)
-        return nextPos, Qas, nextAction, p, done, nextFlagIndex, nextPlanIndex
+        return nextPos, Qas, nextAction, p, done, nextFlagIndex, nextPlanIndex, path
 
     def finishEpisode(self, pos, Qas, path, action, agent, flagIndex, planIndex):
         path.append((pos, action, flagIndex, planIndex))
@@ -185,14 +182,19 @@ class rsMARL:
         Qas = self.updateEligibilityTrace(path, sigma, Qas)
 
         self.checkFlags(nextPos, agent)
-        return nextPos, Qas, nextAction, p, done, nextFlagIndex, nextPlanIndex
+        return nextPos, Qas, nextAction, p, done, nextFlagIndex, nextPlanIndex, path
 
 
     def probability(self, p):
         return random() < p
 
     def chooseAction(self, pos, Qas, agent, flagsIndex, planIndex):
-        availableMoves = self.world.canMove(pos)
+        posToAvoid = []
+        if agent == 1 and not self.done2:
+            posToAvoid.append(self.getNextPos(self.agent2[0], self.agent2[1], self.action2))
+        elif agent == 2 and not self.done1:
+            posToAvoid.append(self.getNextPos(self.agent1[0], self.agent1[1], self.action1))
+        availableMoves = self.world.canMoveAvoid(pos, posToAvoid)
         if self.probability(self.epsilon):
             return choice(availableMoves), "random"
         else:
@@ -236,13 +238,15 @@ class rsMARL:
 
     def updateEligibilityTrace(self, path, sigma, Qas):
         #size = min (len(path), 56)
-        cells = min(len(path), 20)
+        cells = min(len(path), 1)
         #(0.99*0.4)**805 = 0.0
         size = len(path)
         for i in range (size-1, size-cells-1, -1):
             pos, a, flagsIndex, planIndex = path[i]
             x, y = pos
             Qas[y][x][flagsIndex][planIndex][a] += self.alpha*sigma*(self.gamma * self.lambd)**(size -1 - i)
+            if Qas[y][x][flagsIndex][planIndex][a] > 600:
+                Qas[y][x][flagsIndex][planIndex][a] = 600
 
         return Qas
         
@@ -358,12 +362,12 @@ class rsMARL:
 
         if step == None:
             step = lastStep
-        if step > lastStep and setLastStep:
+        elif step > lastStep and setLastStep:
             if agent == 1:
                 self.lastStep1 = step
             else:
                 self.lastStep2 = step
-        if step < lastStep:
+        elif step < lastStep:
             step = lastStep
         return step
 
@@ -422,7 +426,7 @@ if __name__ == '__main__':
     planSolo5 = (plan1Solo5, plan2Solo5)
     planSolo4 = (plan1Solo4, plan2Solo4)
     flagShape = False
-    intialQ = 0.0
+    initialQ = 0.0
 
 
 
@@ -431,10 +435,9 @@ if __name__ == '__main__':
     initialQ = 0.0
     runs = 2000
 
-    #runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, planJoin, False, initialQ, runs, "txt/initial/joint-plan-based.txt")
-    runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, planSolo, False, initialQ, runs, "txt/initial/individual-plan-based.txt")
-    runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, planJoin, True, initialQ, runs, "txt/initial/flag+joint-plan.txt")
-    runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, planSolo, True, initialQ, runs, "txt/initial/flag+individual-plan.txt")
+
+    marl = rsMARL(w, epsilon, gamma, alpha, lambd, start, planSolo, False, 0.0, 20000, False)
+    marl.run()
 
 
     
