@@ -127,7 +127,7 @@ class rsMARL:
                 self.rewards[run] = self.rewards[run-1]
             else:
                 self.rewards[run] = self.getTotalReward()*(self.gamma**step)
-            print (run, step, self.getTotalReward(), self.getTotalReward()*(self.gamma**step), self.world.flagsIndexToName(self.lel1), self.world.flagsIndexToName(self.lel2), int(self.phi(path1[-1][0], 1)), int(self.phi(path2[-1][0], 2)))
+            #print (run, step, self.getTotalReward(), self.getTotalReward()*(self.gamma**step), self.world.flagsIndexToName(self.lel1), self.world.flagsIndexToName(self.lel2), int(self.phi(path1[-1][0], 1)), int(self.phi(path2[-1][0], 2)))
         """for a in range(len(Qas1)):
             for b in range(len(Qas1[a])):
                 for c in range(len(Qas1[a][b])):
