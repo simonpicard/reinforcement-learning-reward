@@ -247,7 +247,7 @@ class rsMARL:
 
     def updateEligibilityTrace(self, path, sigma, Qas):
         #size = min (len(path), 56)
-        cells = min(len(path), 1)
+        cells = min(len(path), 20)
         #(0.99*0.4)**805 = 0.0
         size = len(path)
         for i in range (size-1, size-cells-1, -1):
