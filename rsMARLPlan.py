@@ -97,7 +97,6 @@ class rsMARL:
             quitted = False
             while not self.isDone() :
                 step += 1
-                self.epsilon = run*1.0/self.runs
 
                 if not self.world.isOnGoal(self.agent1) and not done1:
                     self.agent1, Qas1, action1, p1, done1, flagIndex1, planIndex1, path1 = self.runAgent(self.agent1, Qas1, path1, action1, 1, flagIndex1, planIndex1)
@@ -124,7 +123,8 @@ class rsMARL:
                 self.rewards[run] = 0
             else:
                 self.rewards[run] = self.getTotalReward()*(self.gamma**step)
-            #print (run, step, self.getTotalReward(), self.getTotalReward()*(self.gamma**step), self.world.flagsIndexToName(self.flagsGot1), self.world.flagsIndexToName(self.flagsGot2), int(self.phi(path1[-1][0], 1)), int(self.phi(path2[-1][0], 2)))
+            if run%100 == 0:
+                print (run, step, self.getTotalReward(), self.getTotalReward()*(self.gamma**step), self.world.flagsIndexToName(self.flagsGot1), self.world.flagsIndexToName(self.flagsGot2), int(self.phi(path1[-1][0], 1)), int(self.phi(path2[-1][0], 2)))
         """for a in range(len(Qas1)):
             for b in range(len(Qas1[a])):
                 for c in range(len(Qas1[a][b])):
@@ -238,15 +238,13 @@ class rsMARL:
 
     def updateEligibilityTrace(self, path, sigma, Qas):
         #size = min (len(path), 56)
-        cells = min(len(path), 1)
+        cells = min(len(path), 20)
         #(0.99*0.4)**805 = 0.0
         size = len(path)
         for i in range (size-1, size-cells-1, -1):
             pos, a, flagsIndex, planIndex = path[i]
             x, y = pos
             Qas[y][x][flagsIndex][planIndex][a] += self.alpha*sigma*(self.gamma * self.lambd)**(size -1 - i)
-            if Qas[y][x][flagsIndex][planIndex][a] > 600:
-                Qas[y][x][flagsIndex][planIndex][a] = 600
 
         return Qas
         
@@ -395,6 +393,7 @@ def runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, plan, flagShape
     for i in range(nbSimulation):
         print(i)
         marl = rsMARL(w, epsilon, gamma, alpha, lambd, start, plan, flagShape, initialQ, runs, competitive)
+        print("done")
         marl.run()
         tmp = [0.0]*runs
         for i in range(runs):
@@ -436,7 +435,7 @@ if __name__ == '__main__':
     runs = 2000
 
 
-    marl = rsMARL(w, epsilon, gamma, alpha, lambd, start, planSolo, False, 0.0, 20000, False)
+    marl = rsMARL(w, epsilon, gamma, alpha, lambd, start, planSolo, False, 0.0, 2000, False)
     marl.run()
 
 

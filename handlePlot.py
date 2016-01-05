@@ -28,8 +28,8 @@ def handlePlot(xLabel, yLabel, title, data, legend, fOut):
     plt.ylabel(yLabel)
     plt.xlabel(xLabel)
         
-    plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1),\
-          ncol=3, fancybox=True, shadow=True)
+    plt.legend(loc='lower center', bbox_to_anchor=(0.5, 0),\
+          ncol=2, fancybox=True, shadow=True)
 
     plt.savefig(fOut)
     plt.cla()
@@ -59,5 +59,4 @@ def readAndPlot(xLabel, yLabel, title, fOut, files):
 
 if __name__ == "__main__":
 
-    readAndPlot("Episodes", "Total discounted reward", "Initial results", "initial.png", ['txt/initial/no-shaping.txt'])
-    #readAndPlot("Episodes", "Total discounted reward", "Initial results", "initial.png", ['txt/initial/no-shaping.txt', 'txt/initial/flag-based.txt', 'txt/initial/joint-plan-based.txt'])
+    readAndPlot("(#*100) Episodes", "Total discounted reward", "Initial results", "initial.png", ['txt/initial/no-shaping.txt', 'txt/initial/flag-based.txt', 'txt/initial/joint-plan-based.txt', 'txt/initial/individual-plan-based.txt'])

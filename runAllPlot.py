@@ -30,8 +30,8 @@ initialQ = 0.0
 runs = 2000
 competitive = False
 
-rsMARL.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, False, initialQ, runs, "txt/initial/no-shaping.txt", competitive)
-rsMARL.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, True, initialQ, runs, "txt/initial/flag-based.txt", competitive)
+#rsMARL.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, False, initialQ, runs, "txt/initial/no-shaping.txt", competitive)
+#rsMARL.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, True, initialQ, runs, "txt/initial/flag-based.txt", competitive)
 
 rsMARLPlan.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, planJoin, False, initialQ, runs, "txt/initial/joint-plan-based.txt", competitive)
 rsMARLPlan.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, planSolo, False, initialQ, runs, "txt/initial/individual-plan-based.txt", competitive)
@@ -41,7 +41,7 @@ rsMARLPlan.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, planSolo
 #competitive reward
 
 initialQ = 0.0
-runs = 30000
+runs = 2000
 competitive = True
 
 rsMARL.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, False, initialQ, runs, "txt/competitive/no-shaping.txt", competitive)
@@ -54,43 +54,10 @@ rsMARLPlan.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, planSolo
 
 
 
-
-#increase exploration
-
-initialQ = 600.0
-runs = 30000
-competitive = False
-
-rsMARL.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, False, initialQ, runs, "txt/exploration/no-shaping.txt", competitive)
-rsMARL.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, True, initialQ, runs, "txt/exploration/flag-based.txt", competitive)
-
-rsMARLPlan.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, planJoin, False, initialQ, runs, "txt/exploration/joint-plan-based.txt", competitive)
-rsMARLPlan.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, planSolo, False, initialQ, runs, "txt/exploration/individual-plan-based.txt", competitive)
-rsMARLPlan.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, planJoin, True, initialQ, runs, "txt/exploration/flag+joint-plan.txt", competitive)
-rsMARLPlan.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, planSolo, True, initialQ, runs, "txt/exploration/flag+individual-plan.txt", competitive)
-
-
-
-#improve knowledge optimistic
-
-initialQ = 600.0
-runs = 30000
-competitive = False
-
-rsMARL.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, False, initialQ, runs, "txt/knowledgeOptimistic/no-shaping.txt", competitive)
-
-rsMARLPlan.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, planJoin, False, initialQ, runs, "txt/knowledgeOptimistic/joint-plan-based.txt", competitive)
-rsMARLPlan.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, planSolo, False, initialQ, runs, "txt/knowledgeOptimistic/individual-plan-based.txt", competitive)
-rsMARLPlan.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, planSolo4, False, initialQ, runs, "txt/knowledgeOptimistic/plan-based-4.txt", competitive)
-rsMARLPlan.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, planSolo5, False, initialQ, runs, "txt/knowledgeOptimistic/plan-based-5.txt", competitive)
-rsMARLPlan.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, planSolo6, False, initialQ, runs, "txt/knowledgeOptimistic/plan-based-6.txt", competitive)
-
-
-
 #improve knowledge pessimistic
 
 initialQ = 0.0
-runs = 30000
+runs = 2000
 competitive = False
 
 rsMARL.runFor(nbSimulation, w, epsilon, gamma, alpha, lambd, start, False, initialQ, runs, "txt/knowledgePessimistic/no-shaping.txt", competitive)
