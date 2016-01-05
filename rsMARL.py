@@ -146,11 +146,11 @@ class rsMARL:
                 #                     print(list(map(int, Qas2[i][j])), end= " ")
                 #                 print("")
 
-            if quitted:
+            if False:
                 self.rewards[run] = 0
             else:
                 self.rewards[run] = self.getTotalReward()*(self.gamma**step)
-            print (run, step, self.getTotalReward(), self.getTotalReward()*(self.gamma**step), self.world.flagsIndexToName(self.flagsGot1), self.world.flagsIndexToName(self.flagsGot2), int(self.phi(path1[-1][0], 1)), int(self.phi(path2[-1][0], 2)))
+            #print (run, step, self.getTotalReward(), self.getTotalReward()*(self.gamma**step), self.world.flagsIndexToName(self.flagsGot1), self.world.flagsIndexToName(self.flagsGot2), int(self.phi(path1[-1][0], 1)), int(self.phi(path2[-1][0], 2)))
         #print(path2)
         #print(path1)
         #print(self.world.flagsIndexToName(self.flagsGot1))
