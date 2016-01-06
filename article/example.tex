@@ -148,12 +148,12 @@ In order to do so, we explored two methods. The first one is about improving the
 
 \subsection{Improved knowledge}
 
-In this section, the idea is to improve the knowledge of the agents by altering their plan.\\
-One should bear in mind that the aim is to tend to the results given by the join plan based rewards shaping since it gives the best output.\\
-We saw that one major issue of the individual plan based heuristic, is the conflict knowledge. We therefore tried to reduce it.\\
-The first way was to delay the conflict in the plan to the fifth collected flag whereas it is the fourth flag in the original plan.\\
-The other new plan, are also individual but they make the agents collect only five or four flags, thus there is only four or two common flags left.\\
-In the following graph, figure \ref{fig:results2}, one will find the results of those new plan, compared with the no shaping one and the joint plan based one. The delayed conflict is represented by plan-based-6 and the two other shaping heuristics represent the one where the individual plans do not take all the flags.
+In this section, the main idea is to improve the knowledge of the agents by altering their plan.\\
+One should bear in mind that the aim is to tend to the results given by the joint-plan-based rewards shaping since it gives the best output.\\
+We saw that one major issue of the individual-plan-based heuristic, is the conflict knowledge. We therefore tried to reduce it.\\
+The first way of reducing it was to delay the conflict in the plan to the fifth collected flag whereas it was the fourth flag in the original plan.\\
+The other new plans are also individual but they make the agents collect only five or four flags, therefore there are only four or two common flags left.\\
+On the graph figure \ref{fig:results2}, the results of those new plans are compared with the no shaping ones and the joint plan based ones. The delayed conflict is represented by plan-based-6 and the two other shaping heuristics represent the one where the individual-plans do not take all the flags.
 
 \begin{figure}[h!]
   \includegraphics[width=\linewidth]{img/knowledge.png}
@@ -161,13 +161,13 @@ In the following graph, figure \ref{fig:results2}, one will find the results of 
   \label{fig:results2}
 \end{figure}
 
-As expected, the more delayed the conflict is, the best the results are. Specially, the two outcomes of the individual plan stayed but when it is not the one where one agent takes all the flag then  the agents collect on average more flag, proportionally to time before conflicts arise.
+As expected, the more delayed the conflict is, the best the results are. Specially, the two outcomes of the individual-plan stayed but when it isn't the one where one agent takes all the flags then the agents collect on average more flags, proportionally to the time before conflicts arise.
 
 \subsection{Improved cooperation}
 
-In this part, the goal was to improve the plan individual plan based reward shaping through minimal cooperation between the agents.\\
-In this implementation, the agents know if the other agent took a flag. Practically, when one agent collect a flag, it will send a message to the other in order to notice him.\\
-Only the original individual plan was test with this setup, it would not make sens to use it with a joint-plan because it will make the agent go in a state that is not in the plan. The results can be seen in the figure \ref{fig:results3}.
+In this part, the goal was to improve the plan individual-plan-based reward shaping through minimal cooperation between the agents.\\
+In this implementation, the agents know if the other agent took a flag. Practically, when one agent collects a flag, it will send a message to the other in order to notice him.\\
+Only the original individual plan was tested with this setup. It would not make sense to use it with a joint-plan because it will make the agent go in a state that isn't in the plan. The results can be seen in the figure \ref{fig:results3}.
 
 \begin{figure}[h!]
   \includegraphics[width=\linewidth]{img/coop.png}
@@ -175,13 +175,13 @@ Only the original individual plan was test with this setup, it would not make se
   \label{fig:results3}
 \end{figure}
 
-This new cooperation shows significant improvement in the outcome of the individual plan. It does not reache the joint-plan because in this setup the agents will not often collect all flag and they will go for long distance, this behaviour comes from the fact that it was the one intended in the individual plan, here the conflict are avoided but the plan stay poor.
+This new cooperation shows significant improvement in the outcome of the individual plan. It does not reach the joint plan because in this setup the agents will not often collect all flags and they will go for long distances. This behaviour comes from the fact that it was the one intended in the individual plan, here the conflicts are avoided but the plan stay poor.
 
 \section{Conclusion}
-In this paper we explored plan based reward shaping in temporal difference learning with eligibility traces. We compared two type of plan, a joint one and an individual one.\\
+In this paper we explored plan-based reward shaping in temporal difference learning with eligibility traces. We compared two types of plans, a joint one and an individual one.\\
 
 Our next goal was to find a way to improve the individual plan in order to reach the results of the joint one.\\
-We showed that avoiding conflict knowledge leads to better results, we achieve this by modifying the individual plans. Avoiding enough conflict can almost lead to optimal result.\\
+We showed that avoiding conflict knowledge leads to better results. We achieved this by modifying the individual plans. Avoiding enough conflict can almost lead to optimal result.\\
 We then added basic cooperation between the agents to overcome those conflicts. The results were better than with no cooperation but there was still a gap between the two plans.\\
 
 Other work suggested that increasing exploration could overcome conflict knowledge as well \citep{paper4}. Another way to avoid conflict goals is to use abstract MDP reward shaping such as it has been proposed \citep{abstractmdp}.
