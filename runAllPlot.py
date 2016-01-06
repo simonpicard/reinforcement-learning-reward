@@ -22,7 +22,7 @@ planSolo6 = (plan1Solo6, plan2Solo6)
 planSolo5 = (plan1Solo5, plan2Solo5)
 planSolo4 = (plan1Solo4, plan2Solo4)
 
-nbSimulation = 10
+nbSimulation = 30
 
 #initial result
 

@@ -58,5 +58,6 @@ def readAndPlot(xLabel, yLabel, title, fOut, files):
 
 
 if __name__ == "__main__":
-
-    readAndPlot("(#*100) Episodes", "Total discounted reward", "Initial results", "initial1.png", ['txt/initial1/joint-plan-based.txt', 'txt/initial1/individual-plan-based.txt'])
+    readAndPlot("(#*100) Episodes", "Total discounted reward", "Initial results", "initial.png", ['txt/initial/no-shaping.txt', 'txt/initial/flag-based.txt', 'txt/initial/joint-plan-based.txt', 'txt/initial/individual-plan-based.txt', 'txt/initial/flag+joint-plan.txt', 'txt/initial/flag+individual-plan.txt'])
+    readAndPlot("(#*100) Episodes", "Total discounted reward", "Knowledge Pessimistic results", "knowledgePessimistic.png", ['txt/knowledgePessimistic/no-shaping.txt', 'txt/knowledgePessimistic/joint-plan-based.txt', 'txt/knowledgePessimistic/individual-plan-based.txt', 'txt/knowledgePessimistic/plan-based-4.txt', 'txt/knowledgePessimistic/plan-based-5.txt', 'txt/knowledgePessimistic/plan-based-6.txt'])
+    readAndPlot("(#*100) Episodes", "Total discounted reward", "Cooperation results", "coop.png", ['txt/coop/no-shaping.txt', 'txt/coop/flag-based.txt', 'txt/coop/joint-plan-based.txt', 'txt/coop/individual-plan-based.txt', 'txt/coop/flag+joint-plan.txt', 'txt/coop/flag+individual-plan.txt'])
