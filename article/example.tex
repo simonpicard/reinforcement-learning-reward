@@ -16,7 +16,7 @@ jbastogn@ulb.ac.be, mdesclef@ulb.ac.be, spicard@ulb.ac.be}
 
 \begin{abstract}
 Reward shaping is known to significantly improve an agent’s performance in multi-agent reinforcement
-learning (MARL). This paper shows the benefits of using plan-based reward shaping in which a STRIPS planning knowledge is used. The results of agents using plan-based reward shaping will then be compared to a simple Reinforcement Learning (RL) agent with no domain knowledge and they will show how they outperform previous results.
+learning (MARL). This paper shows the benefits of using plan-based reward shaping in which a STRIPS planning knowledge is used. The results of agents using plan-based reward shaping will then be compared to a simple Reinforcement Learning (RL) agent with no domain knowledge and they will show how they outperform previous results. Finally, ways to overcome conflict knowledge in plans will be presented.
 \end{abstract}
 
 \section{Introduction}
@@ -26,17 +26,6 @@ Reinforcement learning agents don't get future feedback about how good was their
 A way of improving the converging speed is to provide prior knowledge to the agents through a method called reward shaping. Reward shaping is the addition of domain knowledge to reinforcement learning in a way that will minimize non-optimal behaviours and will fastly converge to the optimal one. In this article we will see how to effectively incorporate reward shaping in MARL using individual and joint plan based plans and we will combine them with a flag based heuristic\citep{paper4}.
 
 We will show that providing prior knowledge, while not always being possible due to heuristic problems, significantly increases agent's performances and speed of convergence.
-
-\section{Study Case}
-
-We choose two agents who starts on the S1 and S2 squares respectively. Their objective is to reach the goal while trying to collect a maximum of flags while doing so. At each time step, they will move one square up, down, left or right unless they collide with a wall or the other agent. Each of our agents has to reach the goal to end an episode. When an agent reaches the goal, his episode is over and he will wait the other agent to finish his run. For the initial case, when they both reach the goal, they receive a reward equal to $100*NumFlagsCollected$. 
-
-\begin{figure}[h!]
-\centering
-  \includegraphics[width=0.75\linewidth]{img/stydyCase.png}
-  \caption{Multi-Agent, Flag-Collecting Problem Domain.}
-  \label{fig:studycase1}
-\end{figure}
 
 
 
@@ -119,6 +108,17 @@ $\phi (s) = \omega * (CurrentStepInPlan + NumFlagsCollected)$
 $\omega = MaxReward/(NumStepsInPlan + NumFlagsInWorld)$\\\\
 where $NumStepsInPlan$ is the number of step in its state-based plan, $NumFlagsInWorld$ is the total number of flags in the world and $NumFlagsCollected$ is the number of flags the agent has collected itself.
 
+\subsection{Study Case}
+
+We choose two agents who starts on the S1 and S2 squares respectively. Their objective is to reach the goal while trying to collect a maximum of flags while doing so. At each time step, they will move one square up, down, left or right unless they collide with a wall or the other agent. Each of our agents has to reach the goal to end an episode. When an agent reaches the goal, his episode is over and he will wait the other agent to finish his run. For the initial case, when they both reach the goal, they receive a reward equal to $100*NumFlagsCollected$. 
+
+\begin{figure}[h!]
+\centering
+  \includegraphics[width=0.75\linewidth]{img/stydyCase.png}
+  \caption{Multi-Agent, Flag-Collecting Problem Domain.}
+  \label{fig:studycase1}
+\end{figure}
+
 \section{Results and Discussion}
 \subsection{Initial results}
 
@@ -153,7 +153,7 @@ One should bear in mind that the aim is to tend to the results given by the join
 We saw that one major issue of the individual plan based heuristic, is the conflict knowledge. We therefore tried to reduce it.\\
 The first way was to delay the conflict in the plan to the fifth collected flag whereas it is the fourth flag in the original plan.\\
 The other new plan, are also individual but they make the agents collect only five or four flags, thus there is only four or two common flags left.\\
-In the following graph, one will find the results of those new plan, compared with the no shaping one and the joint plan based one. The delayed conflict is represented by plan-based-6 and the two other shaping heuristics represent the one where the individual plans do not take all the flags.
+In the following graph, figure \ref{fig:results2}, one will find the results of those new plan, compared with the no shaping one and the joint plan based one. The delayed conflict is represented by plan-based-6 and the two other shaping heuristics represent the one where the individual plans do not take all the flags.
 
 \begin{figure}[h!]
   \includegraphics[width=\linewidth]{img/knowledge.png}
@@ -161,7 +161,13 @@ In the following graph, one will find the results of those new plan, compared wi
   \label{fig:results2}
 \end{figure}
 
+As expected, the more delayed the conflict is, the best the results are. Specially, the two outcomes of the individual plan stayed but when it is not the one where one agent takes all the flag then  the agents collect on average more flag, proportionally to time before conflicts arise.
+
 \subsection{Improved cooperation}
+
+In this part, the goal was to improve the plan individual plan based reward shaping through minimal cooperation between the agents.\\
+In this implementation, the agents know if the other agent took a flag. Practically, when one agent collect a flag, it will send a message to the other in order to notice him.\\
+Only the original individual plan was test with this setup, it would not make sens to use it with a joint-plan because it will make the agent go in a state that is not in the plan. The results can be seen in the figure \ref{fig:results3}.
 
 \begin{figure}[h!]
   \includegraphics[width=\linewidth]{img/coop.png}
@@ -169,8 +175,18 @@ In the following graph, one will find the results of those new plan, compared wi
   \label{fig:results3}
 \end{figure}
 
-\section{Conclusion}
+This new cooperation shows significant improvement in the outcome of the individual plan. It does not reache the joint-plan because in this setup the agents will not often collect all flag and they will go for long distance, this behaviour comes from the fact that it was the one intended in the individual plan, here the conflict are avoided but the plan stay poor.
 
+\section{Conclusion}
+In this paper we explored plan based reward shaping in temporal difference learning with eligibility traces. We compared two type of plan, a joint one and an individual one.\\
+
+Our next goal was to find a way to improve the individual plan in order to reach the results of the joint one.\\
+We showed that avoiding conflict knowledge leads to better results, we achieve this by modifying the individual plans. Avoiding enough conflict can almost lead to optimal result.\\
+We then added basic cooperation between the agents to overcome those conflicts. The results were better than with no cooperation but there was still a gap between the two plans.\\
+
+Other work suggested that increasing exploration could overcome conflict knowledge as well \citep{paper4}. Another way to avoid conflict goals is to use abstract MDP reward shaping such as it has been proposed \citep{abstractmdp}.
+
+Future work about overcoming conflict knowledge in multi agent learning could be about knowledge revision. It has already be successful for single agent \citep{efthymiadis2014knowledge}.
 
 
 
