@@ -148,6 +148,13 @@ In order to do so, we explored two methods. The first one is about improving the
 
 \subsection{Improved knowledge}
 
+In this section, the idea is to improve the knowledge of the agents by altering their plan.\\
+One should bear in mind that the aim is to tend to the results given by the join plan based rewards shaping since it gives the best output.\\
+We saw that one major issue of the individual plan based heuristic, is the conflict knowledge. We therefore tried to reduce it.\\
+The first way was to delay the conflict in the plan to the fifth collected flag whereas it is the fourth flag in the original plan.\\
+The other new plan, are also individual but they make the agents collect only five or four flags, thus there is only four or two common flags left.\\
+In the following graph, one will find the results of those new plan, compared with the no shaping one and the joint plan based one. The delayed conflict is represented by plan-based-6 and the two other shaping heuristics represent the one where the individual plans do not take all the flags.
+
 \begin{figure}[h!]
   \includegraphics[width=\linewidth]{img/knowledge.png}
   \caption{Improved knowledge.}
