@@ -117,13 +117,29 @@ where $\omega$ is a scaling factor and $CurrentStepInPlan$ is the corresponding 
 \section{Results and Discussion}
 \subsection{Initial results}
 
-After running thirty times all experiments, the mean discounted reward per episode were plotted on the following graphs. The discounted reward is the original reward multiplied by the discounted factor exponent the step number needed to reach the goal  \citep{SCpbrs}. Our initial case results are shown on Figure \ref{fig:results1}. \\
+After running thirty times all experiments, the mean discounted reward per episode were plotted on the following graphs. The discounted reward is the goal reward multiplied by the discounted factor exponent the step number needed to reach the goal  \citep{SCpbrs}. This value offers a way to classify the shaping, taking into account the number of flags collected and the time the agents takes to get them.\\
+ Our initial case results are shown on Figure \ref{fig:results1}. \\
 
 \begin{figure}[h!]
   \includegraphics[width=\linewidth]{img/initial.png}
   \caption{Initial results.}
   \label{fig:results1}
 \end{figure}
+
+First, it is shown on the results that the learning with no shaping gives the worst outcome. This result was the expected one, since knowledge, even poor, improves the behaviour of the agents.\\
+Next, as one can see, the join plan based gives the best result. With the joint plan, the agents cooperates to collect the six flags, i.e the optimal way.\\
+About the individual plan based shaping, the discounted reward is rather low, just above the no shaping one. This results comes from two main behaviours of the agents with this plan. When analysing the individual plans, one will quickly notice that the agent will jeopardize each other early. Indeed, each agent will want to collect the flag that the other agent needs to collect, they will find themselves in a deadlock situation. The other possible outcome is when agent number two takes all the flag and the other one none as it can be seen in figure \ref{fig:behave}.\\
+The flag based reward shaping get the agents the learn a behaviour where they collect the flags that are on their path leading to a result where the agent goes quickly to the goal but with approximately two third of the flags.\\
+When adding the flag based heuristic to the plan based one, for the joint plan it converges quicker but then do not gives significant differences since the results without it are already optimal. For the individual plan based reward shaping, it is clear that it improves the reward a bit because it adds some knowledge to the agents.\\
+
+\begin{figure}[h!]
+  \includegraphics[width=\linewidth]{img/behavious.png}
+  \caption{Behaviours of :}
+  \label{fig:behave}
+\end{figure}
+
+Once obtaining those result, our aim was to reduce the gap between the results of the plan based reward shaping with joint plan and individual plan.\\
+In order to do so, we explored two methods. The first one is about improving the knowledge of the agents and the second one concern their cooperation.
 
 \subsection{Improved knowledge}
 
