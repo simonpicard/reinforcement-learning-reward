@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2014.4.25)  31 DEC 2015 20:21
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2014.4.25)  6 JAN 2016 14:00
 entering extended mode
 **C:/Users/Thechrom/planBasedRewardShapingMARL/article/example.tex
 (C:/Users/Thechrom/planBasedRewardShapingMARL/article/example.tex
@@ -175,119 +175,153 @@ File: uni-32.def 2013/05/13 UCS: Unicode data U+2000..U+20FF
 )
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 22.
-LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10.95> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 32.
 
-Underfull \hbox (badness 1975) in paragraph at lines 35--36
+<img/stydyCase.png, id=1, 794.97pt x 589.4522pt>
+File: img/stydyCase.png Graphic file (type png)
+ <use img/stydyCase.png>
+Package pdftex.def Info: img/stydyCase.png used on input line 36.
+(pdftex.def)             Requested size: 179.54578pt x 133.1247pt.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10.95> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 44.
+
+Underfull \hbox (badness 1975) in paragraph at lines 47--48
 \OT1/ptm/m/n/10 there-fore agents have to run mul-ti-ple episodes where
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 35--36
+Underfull \hbox (badness 10000) in paragraph at lines 47--48
+
+ []
+
+[1{C:/ProgramData/MiKTeX/2.9/pdftex/config/pdftex.map}
+
+
+
+ <C:/Users/Thechrom/planBasedRewardShapingMARL/article/img/stydyCase.png (PNG c
+opy)>]
+Underfull \hbox (badness 10000) in paragraph at lines 49--51
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 37--39
+Underfull \hbox (badness 10000) in paragraph at lines 55--56
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 43--44
+Underfull \hbox (badness 10000) in paragraph at lines 57--59
 
  []
 
 
-Underfull \vbox (badness 1478) has occurred while \output is active []
-
- [1{C:/ProgramData/MiKTeX/2.9/pdftex/config/pdftex.map}
-
-
-
-]
-Underfull \hbox (badness 10000) in paragraph at lines 45--47
+Underfull \hbox (badness 10000) in paragraph at lines 62--64
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 50--52
+Underfull \hbox (badness 10000) in paragraph at lines 65--67
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 53--55
-
- []
-
-
-Underfull \hbox (badness 1057) in paragraph at lines 53--55
+Underfull \hbox (badness 1057) in paragraph at lines 65--67
 \OT1/ptm/m/n/10 where $\OML/cmm/m/it/10 F\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 s; s
 []\OT1/cmr/m/n/10 )$ \OT1/ptm/m/n/10 is a dif-fer-ence of po-ten-tials de-fined
  as
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 53--55
+Underfull \hbox (badness 10000) in paragraph at lines 65--67
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 56--58
+Underfull \hbox (badness 10000) in paragraph at lines 68--70
+
+ []
+
+<img/strips.png, id=13, 639.89063pt x 616.55344pt>
+File: img/strips.png Graphic file (type png)
+ <use img/strips.png>
+Package pdftex.def Info: img/strips.png used on input line 77.
+(pdftex.def)             Requested size: 179.54578pt x 173.00069pt.
+
+<img/individualPlan.png, id=14, 971.12813pt x 641.39626pt>
+File: img/individualPlan.png Graphic file (type png)
+
+<use img/individualPlan.png>
+Package pdftex.def Info: img/individualPlan.png used on input line 87.
+(pdftex.def)             Requested size: 203.48668pt x 134.39378pt.
+
+<img/joinPlan.png, id=15, 1159.33125pt x 459.21562pt>
+File: img/joinPlan.png Graphic file (type png)
+ <use img/joinPlan.png>
+Package pdftex.def Info: img/joinPlan.png used on input line 94.
+(pdftex.def)             Requested size: 203.48668pt x 80.59517pt.
+
+[2 <C:/Users/Thechrom/planBasedRewardShapingMARL/article/img/strips.png (PNG co
+py)> <C:/Users/Thechrom/planBasedRewardShapingMARL/article/img/individualPlan.p
+ng (PNG copy)> <C:/Users/Thechrom/planBasedRewardShapingMARL/article/img/joinPl
+an.png (PNG copy)>]
+<img/listingFormattedJoinAgent1.png, id=21, 642.14906pt x 343.2825pt>
+File: img/listingFormattedJoinAgent1.png Graphic file (type png)
+
+<use img/listingFormattedJoinAgent1.png>
+Package pdftex.def Info: img/listingFormattedJoinAgent1.png used on input line 
+103.
+(pdftex.def)             Requested size: 203.48668pt x 108.77882pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 108--109
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 59--60
+Underfull \hbox (badness 10000) in paragraph at lines 112--114
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 63--65
-
- []
-
-
-Underfull \hbox (badness 1033) in paragraph at lines 63--65
+Underfull \hbox (badness 1033) in paragraph at lines 112--114
 \OT1/ptm/m/n/10 where $\OML/cmm/m/it/10 !$ \OT1/ptm/m/n/10 is a scal-ing fac-to
 r and $\OML/cmm/m/it/10 CurrentStepInPlan$
  []
 
-<img/studycase.png, id=13, 424.58624pt x 310.91156pt>
-File: img/studycase.png Graphic file (type png)
- <use img/studycase.png>
-Package pdftex.def Info: img/studycase.png used on input line 71.
-(pdftex.def)             Requested size: 239.39438pt x 175.30005pt.
 
-
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
-
-Underfull \hbox (badness 2368) in paragraph at lines 81--82
-\OT1/ptm/m/n/10 After run-ning thirty times all ex-per-i-ments, the mean
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 81--82
+Underfull \hbox (badness 10000) in paragraph at lines 120--121
 
  []
 
-<img/mean.jpg, id=14, 963.6pt x 642.4pt>
-File: img/mean.jpg Graphic file (type jpg)
- <use img/mean.jpg>
-Package pdftex.def Info: img/mean.jpg used on input line 84.
-(pdftex.def)             Requested size: 239.39438pt x 159.58997pt.
+<img/initial.png, id=22, 578.16pt x 433.62pt>
+File: img/initial.png Graphic file (type png)
+ <use img/initial.png>
+Package pdftex.def Info: img/initial.png used on input line 123.
+(pdftex.def)             Requested size: 239.39438pt x 179.54533pt.
 
-(C:\Users\Thechrom\planBasedRewardShapingMARL\article\example.bbl [2 <C:/Users/
-Thechrom/planBasedRewardShapingMARL/article/img/studycase.png> <C:/Users/Thechr
-om/planBasedRewardShapingMARL/article/img/mean.jpg>]) [3
+<img/knowledge.png, id=24, 578.16pt x 433.62pt>
+File: img/knowledge.png Graphic file (type png)
+ <use img/knowledge.png>
+Package pdftex.def Info: img/knowledge.png used on input line 131.
+(pdftex.def)             Requested size: 239.39438pt x 179.54533pt.
+
+<img/coop.png, id=25, 578.16pt x 433.62pt>
+File: img/coop.png Graphic file (type png)
+ <use img/coop.png>
+Package pdftex.def Info: img/coop.png used on input line 139.
+(pdftex.def)             Requested size: 239.39438pt x 179.54533pt.
+
+(C:\Users\Thechrom\planBasedRewardShapingMARL\article\example.bbl [3 <C:/Users/
+Thechrom/planBasedRewardShapingMARL/article/img/listingFormattedJoinAgent1.png 
+(PNG copy)> <C:/Users/Thechrom/planBasedRewardShapingMARL/article/img/initial.p
+ng> <C:/Users/Thechrom/planBasedRewardShapingMARL/article/img/knowledge.png> <C
+:/Users/Thechrom/planBasedRewardShapingMARL/article/img/coop.png>]) [4
 
 ]
 (C:\Users\Thechrom\planBasedRewardShapingMARL\article\example.aux) ) 
 Here is how much of TeX's memory you used:
- 3041 strings out of 493921
- 38635 string characters out of 3147273
- 101650 words of memory out of 3000000
- 6319 multiletter control sequences out of 15000+200000
+ 3079 strings out of 493921
+ 39426 string characters out of 3147273
+ 101740 words of memory out of 3000000
+ 6352 multiletter control sequences out of 15000+200000
  20333 words of font info for 41 fonts, out of 3000000 for 9000
  841 hyphenation exceptions out of 8191
  34i,12n,35p,969b,688s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -302,9 +336,9 @@ Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Program F
 iles/MiKTeX 2.9/fonts/type1/urw/times/utmb8a.pfb><C:/Program Files/MiKTeX 2.9/f
 onts/type1/urw/times/utmr8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/ti
 mes/utmri8a.pfb>
-Output written on example.pdf (3 pages, 181321 bytes).
+Output written on example.pdf (4 pages, 728293 bytes).
 PDF statistics:
- 55 PDF objects out of 1000 (max. 8388607)
+ 68 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 11 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 41 words of extra memory for PDF output out of 10000 (max. 10000000)
 

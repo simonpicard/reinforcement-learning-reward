@@ -12,6 +12,13 @@ Devlin, S. and Kudenko, D. (2004).
 \newblock Plan-based reward shaping for multi-agent reinforcement learning.
 \newblock {\em The Knowledge Engineering Review}, 00:1--24.
 
+\bibitem[Efthymiadis and Kudenko, 2013]{SCpbrs}
+Efthymiadis, K. and Kudenko, D. (2013).
+\newblock Using plan-based reward shaping to learn strategies in starcraft:
+  Broodwar.
+\newblock In {\em Computational Intelligence in Games (CIG), 2013 IEEE
+  Conference on}, pages 1--8. IEEE.
+
 \bibitem[Grzes and Kudenko, 2011]{rs}
 Grzes, M. and Kudenko, D. (2011).
 \newblock {\em Reward Shaping and Mixed Resolution Function Approximation}.
