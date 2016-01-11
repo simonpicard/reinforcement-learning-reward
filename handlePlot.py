@@ -59,4 +59,14 @@ def readAndPlot(xLabel, yLabel, title, fOut, files):
 
 if __name__ == "__main__":
 
-    readAndPlot("(#*100) Episodes", "Total discounted reward", "Initial results", "initial1.png", ['txt/initial1/joint-plan-based.txt', 'txt/initial1/individual-plan-based.txt'])
+    #readAndPlot("(#*100) Episodes", "Total discounted reward", "Initial results", "initial.png", \
+    #    ['txt/initial/no-shaping.txt','txt/initial/flag-based.txt','txt/initial/joint-plan-based.txt', 'txt/initial/individual-plan-based.txt',\
+    #    'txt/initial/joint-plan.txt', 'txt/initial/individual-plan-based.txt'])
+    #readAndPlot("(#*100) Episodes", "Total discounted reward", "Improve knowledge", "knwoledge.png", ['txt/initial/joint-plan-based.txt', 'txt/initial/individual-plan-based.txt'])
+    #readAndPlot("(#*100) Episodes", "Total discounted reward", "Improve cooperation", "coop.png", ['txt/initial/joint-plan-based.txt', 'txt/initial/individual-plan-based.txt'])
+
+
+
+    readAndPlot("(#*100) Episodes", "Total discounted reward", "Initial results", "initialtweek.png", ['txt/tweeked/initial/no-shaping.txt', 'txt/tweeked/initial/flag-based.txt', 'txt/tweeked/initial/joint-plan-based.txt', 'txt/tweeked/initial/individual-plan-based.txt', 'txt/tweeked/initial/flag+joint-plan.txt', 'txt/tweeked/initial/flag+individual-plan.txt'])
+    readAndPlot("(#*100) Episodes", "Total discounted reward", "Improved knowledge", "knowledgetweek.png", ['txt/tweeked/knowledge/no-shaping.txt', 'txt/tweeked/knowledge/joint-plan-based.txt', 'txt/tweeked/knowledge/individual-plan-based.txt', 'txt/tweeked/knowledge/plan-based-4.txt', 'txt/tweeked/knowledge/plan-based-5.txt', 'txt/tweeked/knowledge/plan-based-6.txt'])
+    readAndPlot("(#*100) Episodes", "Total discounted reward", "Cooperation", "cooptweek.png", ['txt/tweeked/coop/no-shaping.txt', 'txt/tweeked/coop/joint-plan-no-coop.txt', 'txt/tweeked/coop/individual-plan-no-coop.txt', 'txt/tweeked/coop/individual-plan-coop.txt'])
