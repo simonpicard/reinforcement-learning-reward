@@ -18,56 +18,70 @@
 \begin{document}
 \maketitle
 
-\section{Does the introduction explain clearly the content of the paper}
+\section{Introduction review}
 The introduction begins with a quick analogy of what shape could cooperative agreement can take in real life. It specifies the problems that arise with this methods in real life, it is good because those problems will also be present in the simulation. Then introduction then add the apology-forgiveness mechanism to the analogy.\\
-Through this example the introduction cleverly state how the paper is structured. Indeed, it first talks about the basic principle of agreement cooperation, then the possible exploit it induces and finally how to resolve them with apology.\\
+Through this example the introduction cleverly state how the paper is structured. Indeed, it first talks about the basic principle of agreement cooperation, then the possible exploit it induces and finally how to avoid them with apology.\\
 Finally, the introduction gives an example of where this kind of work has already been studied and conclude with a the straightforward aim of the paper.\\
 
 It might be welcome to introduce the evolutionary aspect of the work here
 
+\section{Abstract review}
+The abstract present the structure of the work in concise and accurate way. The passage "Indeed, while considering costly apologies, we can observe situations in which individuals prefer to continue to cooperate." is a bit misleading because it tends to express that the higher the cost of the apology, the higher the cooperation rate which is not true as it said latter.
 
-\section{whether there is sufficient background information to understand the relevance of the work}
+
+\section{Background informations review}
 The problem of cooperation loss is clearly stated and proved therefore it is easy to understand the relevance of the work.
 
 
-\section{whether the methods are clearly explained (can the results be reproduced?)}
+\section{Model and methods review}
 The model is overall greatly explained.\\
 One might want to review those points :
 \begin{itemize}
 \item In the simulation, the paper say that the population is initialized with a random strategies but is not said which distribution it uses.
-\item There is Lack of coherence in the notation of the variable $\mathbf{q}_{c, ij} = \mathbf{q}_{c}^{ij}$
-\item Some notation are not explained $p^{k}_{\alpha, ij}$ is the $k^{th}$ element of $\mathbf{p}_{\alpha,ij}$
-\item $N$ is not defined
+\item There is Lack of coherence in the notation of some variable, e.g $\mathbf{q}_{c, ij} = \mathbf{q}_{c}^{ij}$
+\item Some notation are not explained, e.g $p^{k}_{\alpha, ij}$ is the $k^{th}$ element of $\mathbf{p}_{\alpha,ij}$
+\item $N$ is not defined (but its value is given).
 \item How a stationary distribution of strategies works is missing.
-\item In general, variable are defined but what they represent is not said.
+\item In general, variable are defined but their meaning is not explained.
 \end{itemize}
 Besides those small issues, the paper precisely define how to model was created and how the results were obtained.
 
 
-\section{whether the results answer the questions asked in the paper.}
-Results cover all aspects of the evolution of individuals behaviour. It analyses all cases where it favorises then defectors, then revenge,... \todo{pas compris la phrase}
-The results show clearly what is the general behaviour in each case.\\
+\section{Results review}
+Results cover all aspects of the evolution of individuals and gives the general behaviour for each scenario strategies. The main one is to cooperate and be revengeful if the commitment is broken.
 
+In a second place, the results show how commitment improves cooperation.\\
 
-The point is then to see how efficient are apologies and how they promote the cooperation. In the results section, one can see that apologies improve the cooperation but moreover, the paper identifies possible problems coming from it. \\
-Two deviation are possible if the apology cost is bad. If it is too low or too high it leads to a trust loss.\\
+And finally, the point is to see how efficient are apologies and how they promote the cooperation. In the results section, one can see that apologies improve the cooperation but moreover, the paper identifies possible problems coming from it. \\
+Two deviations are possible if the apology cost is bad. If it is too low or too high it leads to a trust loss.\\
 In order to avoid this exploit, the paper gives a policy to follow : $c<\gamma<\sigma$.\\
 
-The result discussion could be improved by explaining more extensively why the graphs is figure 1 use this, at first sight, strange $y$ value.
-
-\section{whether all questions are answered}
-There is one and  it is.
+The result discussion could be improved by explaining more extensively why the graphs in figure 1 use this, at first sight, strange $y$ value.\\
+The structure might be more clear if the impact of commitment was explored before exploring the behaviour of a population in specific case.
 
 
-\section{whether the conclusion is sufficient}
+\section{Discussion review}
 
-They discuss clearly the results answering their first questions. 
-The paper also makes the correspondence with real life cooperation and compare the results obtained with the meaning of the reactions of real humans.
+\subsection{Conclusion}
 
-Missing : No real conclusion about revenge. Should clearly say if revenge was good or bad and give a conclusion on it as it did for forgiveness.
+The conclusion efficiently summarize analyse of the results, filling its first purpose.\\
+
+Then, the gathered information are linked to discover new interesting points. First, the increase of retaliating strategies actually increases the level of cooperation \todo{pas trop compris pq}. It then insist on the notion of sincereness, which is to be used with the apology. An apology is sincere when their cost is neither too low nor too high ($c<\gamma<\sigma$) and it increases cooperation.\\
+
+Once again, this section coherently give details about the behaviour of the population with agreement and how apologies improve cooperation level and therefore is in harmony with the introduction.\\
+
+The conclusion also makes the correspondence with real life cooperation and compare the results obtained with the meaning of the reactions of real humans such as in the introduction, once again making it consistent with the introduction.
+
+Although it might be obvious, there should be a real conclusion about revenge. Which would clearly say if revenge was good or bad and link it to the apology system.
 
 
-\section{and whether the overall style is ok and}
+\subsection{Future work}
+
+Future work is clearly stipulated and seem interesting\todo{pourquoi ?}. Adding trust lists\todo{expliquer le principe} and sharing them is something humans could do.
+The study of evolutionary trust-levels attributed to each individual can be an interesting work\todo{pourquoi ?}.
+
+
+\section{Style review}
 The paper is accurately written, using academic vocabulary and coherent use of tenses.\\
 Since it is always possible to do better, one might take those points into consideration :
 \begin{itemize}
@@ -80,37 +94,46 @@ Since it is always possible to do better, one might take those points into consi
 \end{itemize}
 
 
-\section{whether you believe things are missing in the discussion.}
+\section{Positive points}
 
-Future work is clearly stipulated and seem interesting. Adding trust lists and sharing them is something humans could do.
-The study of evolutionary trust-levels attributed to each individual can be an interesting work.
+Great connection with the introduction and the rest of the paper. Specially the conclusion which reuse the cleverly designed parallel between real life and this experiment. This final response to the introduction make it a well structured article.\\
 
+As said a numerous of time in this review, this research put onto the light a policy to follow when using an apology system in a cooperative agreement evolutionary simulation. This result is very interesting for two reasons. First it give a way to successfully implement this mechanism. And moreover, it makes one wondering why begin out this range is bad, leading to this sincerity idea.\\
 
-\section{etc.}
-
-
-\section{3 positive points concerning the work, clearly specifying why you think they are well-done or interesting}
-
-Everything is clearly stipulated and the work could be done just by reading this paper. 
-The work is well divided and we don't go west by reading the paper. The conducting wire is smartly well done.
-The results are shown in a way that they directly answer to the preliminary questions/thoughts.
-The paper gives us a bit of redundancy that helps the reader to understand it.
+The results are shown in a way that they directly answer to the preliminary questions. Their pertinently representation allow us to answer them almost without their interpretation.\todo{pas top top}
 
 
-\section{3 negative points, which may include missing/unclear explanations or suggestions for improvement}
+\section{Negative points}
 
-I think the work is not based on enough references. It makes me think the paper may contain some errors or some gaps.
-The conclusion is missing some points like a review of revenge.
-Table 1 / Table 2 : one should be theoretical results but it is not clearly stipulated, better titles needed.
+The use of stationary distribution of strategies is the basis of this work but what is actually is, how and why it works is not said. Also the representation of this tool in table 1 and 2 is not clear, one does not know how to handle the data it contains. It should be more explained since it is the main tool of the experiment.\\
+
+About the creation of the stationary distribution of strategies, the process is given step by step which allow us to reproduce the results easily but the operation are not explained. It is an algorithm to follow but it is full of interesting value that are not explained.\\
+Note that this point differ from the previous one because it is about how stationary distribution of strategies is constructed and not about it use and purpose.\\ \todo{peut etre pas clair ?}
+
+Although it might be obvious, there should be a real conclusion about revenge. Which would clearly say if revenge was good or bad and link it to the apology system.\todo{c/c de la section sur la conclusion}\\
+
+I think the work is not based on enough references. It makes me think the paper may contain some errors or some gaps.\todo{je pense qu'ils ont juste pas remis les ref qui était dans l'article de base}
 
 
-\section{at least 3 clear and relevant questions on the content or the methods used which can be asked (next to other questions)}
+\section{Questions}
+\begin{itemize}
 
-3)at least 3 clear and relevant questions on the content or the methods used which can be asked (next to other questions). 
+\item What happen if you modify the set up cost and the agreement break cost ?
 
-Can you give a good and precise example of a practical use of this experiment in real life ? 
+\item How a stationary distribution of strategies work and what is a markov chain?
 
-There is no experiment in which cooperation converges ? Why ? Was it intended ? 
+\item What happens if the noise is even bigger ? 
+
+\item Can you give a good and precise example of a practical use of this experiment in real life ? 
+
+\item There is no experiment in which cooperation converges ? Why ? Was it intended ?\todo{parceque c'est sur un espace fini ?}
+
+\item Do you think that adding a trust-list about accepting or not an apology might not be counterproductive because it will decreases the propensity of one individual to accept it and therefore to cooperate ?
+
+\item If this trust-list is set up, does theoretical results still be used ? Since the scenario is now dynamic, simulation might be the only option, is it bad ?
+
+\end{itemize}
+
 
 
 
