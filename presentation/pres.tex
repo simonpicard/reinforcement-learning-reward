@@ -27,7 +27,10 @@ Université Libre de Bruxelles, Boulevard du Triomphe - CP 212, 1050 Brussels, B
 
 \begin{block}{}
 \begin{itemize}
-\item 
+\item Reinforcement learning
+\item Increase speed through prior knowledge
+\item Multi-agent
+\item Plan
 \end{itemize}
 \end{block}
 
@@ -37,24 +40,21 @@ Université Libre de Bruxelles, Boulevard du Triomphe - CP 212, 1050 Brussels, B
 \subsection{Reinforcement Learning}
 \begin{frame}{Reinforcement Learning}
 
-\begin{block}{}
+\begin{block}{Q-Matrix}
 \begin{itemize}
 \item MDP =  $< S, A, T, R >$
 \item $Q(s, a) \leftarrow  Q(s, a) +  \alpha [r + \gamma Q(s', a') - Q(s,a)]$
-\item $Q(s, a) \leftarrow  Q(s, a) +  \alpha *  \sigma *  (\gamma * \lambda)^t$
-\item $\sigma = r + \gamma Q(s', a') - Q(s,a)$
+\item $\alpha$ : learning rate
+\item $r$ : reward
+\item $\gamma$ : discount factor
 \end{itemize}
 \end{block}
 
-\end{frame}
-
-\subsection{Reward Shaping}
-\begin{frame}{Reward Shaping}
-
-\begin{block}{}
+\begin{block}{Eligibility traces}
 \begin{itemize}
-\item $Q(s, a) \leftarrow  Q(s, a) +  \alpha [r + F(s, s') + \gamma Q(s', a') - Q(s,a)]$
-\item $F(s, s') =\gamma \phi (s') - \phi (s)$
+\item $Q(s, a) \leftarrow  Q(s, a) +  \alpha *  \sigma *  (\gamma * \lambda)^t$
+\item $\sigma = r + \gamma Q(s', a') - Q(s,a)$
+\item $\lambda$ : eligibility factor
 \end{itemize}
 \end{block}
 
@@ -62,30 +62,54 @@ Université Libre de Bruxelles, Boulevard du Triomphe - CP 212, 1050 Brussels, B
 
 
 \subsection{Plan Based Reward Shaping}
-\begin{frame}{Plan Based Reward Shaping}
+\begin{frame}{Reward Shaping}
+
+\begin{block}{Basic}
+\begin{itemize}
+\item $Q(s, a) \leftarrow  Q(s, a) +  \alpha [r + F(s, s') + \gamma Q(s', a') - Q(s,a)]$
+\item $F(s, s') =\gamma \phi (s') - \phi (s)$
+\item Potential function over a state
+\end{itemize}
+\end{block}
+
+\begin{columns}
+
+\begin{column}{0.7\linewidth}
+
+\begin{block}{Plan Based Reward Shaping}
+\begin{itemize}
+\item Set of subgoals
+\item To be followed in order
+\item Proportional to the step in the plan
+\end{itemize}
+\end{block}
+
+\end{column}
+
+\begin{column}{0.3\linewidth}
 
 \begin{figure}[h!]
 \centering
-  \includegraphics[height=0.5\textheight]{../article/img/strips.png}
+  \includegraphics[width = \linewidth]{../article/img/strips.png}
   \caption{Plan-base reward shaping}
   \label{fig:strips}
 \end{figure}
 
-\begin{block}{}
-\begin{itemize}
-\item 
-\end{itemize}
-\end{block}
+\end{column}
+
+\end{columns}
 
 \end{frame}
 
 
-\begin{frame}{Multi-Agent Planning}
+\begin{frame}
 
-\begin{block}{}
+\begin{block}{Multi-Agent Planning}
 \begin{itemize}
-\item Individual
-\item Joint
+\item How to set the plan
+\item Information sharing
+\item One centralized agent : joint plans
+\item Each agent make its plan : individual plans
 \end{itemize}
 \end{block}
 
@@ -101,18 +125,36 @@ Université Libre de Bruxelles, Boulevard du Triomphe - CP 212, 1050 Brussels, B
 \subsection{Study Case}
 \begin{frame}{Problem}
 
+\begin{columns}
+\begin{column}{0.5\linewidth}
 \begin{figure}[h!]
 \centering
-  \includegraphics[height=0.5\textheight]{../article/img/stydyCase.png}
+  \includegraphics[width=\linewidth]{../article/img/stydyCase.png}
   \caption{Multi-Agent, Flag-Collecting Problem Domain.}
   \label{fig:studycase1}
 \end{figure}
+\end{column}
 
+\begin{column}{0.5\linewidth}
 \begin{block}{}
 \begin{itemize}
-\item 
+\item Two agents
+\item Six flags
+\item Seven rooms
+\item One goal
+\item Reward  $\left\{
+\begin{array}{l}
+on\ goal =  Flags*100 \\
+not\ on\ goal = 0
+\end{array}
+\right.$
 \end{itemize}
+
+
 \end{block}
+\end{column}
+
+\end{columns}
 
 \end{frame}
 \begin{frame}{Potential Function}
