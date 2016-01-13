@@ -25,13 +25,12 @@ Université Libre de Bruxelles, Boulevard du Triomphe - CP 212, 1050 Brussels, B
 \begin{columns}[onlytextwidth]
 \begin{column}{0.45\linewidth}
 
-\begin{block}{Field}
-\begin{itemize}
-\item Reinforcement learning
-\item Multi-agent
-\item Reward shaping
-\item Plan
-\end{itemize}
+
+\begin{block}{Content}
+$\ $\\
+\tableofcontents
+$\ $\\
+
 \end{block}
 
 \end{column}
@@ -39,11 +38,14 @@ Université Libre de Bruxelles, Boulevard du Triomphe - CP 212, 1050 Brussels, B
 
 \end{column}
 \begin{column}{0.45\linewidth}
-\begin{block}{Content}
-$\ $\\
-\tableofcontents
-$\ $\\
 
+\begin{block}{Field}
+\begin{itemize}
+\item Reinforcement learning
+\item Multi-agent
+\item Reward shaping
+\item Plan
+\end{itemize}
 \end{block}
 
 \end{column}
@@ -256,11 +258,17 @@ not\ on\ goal = 0
 
 \begin{block}{Modus operandi}
 \begin{itemize}
+\item SARSA($\lambda$)
+\item $\alpha = 0.1$
+\item $\gamma = 0.99$
+\item $\lambda = 0.4$
 \item 2000 episodes
 \item Average over 30 simulations
 \item Value averaged over 100 previous episodes
 \item Discounted total reward over episodes
 \item Discounted total reward = $reward*\gamma^{steps}$
+
+
 \end{itemize}
 \end{block}
 
@@ -367,11 +375,11 @@ not\ on\ goal = 0
 
 \begin{block}{Analyse}
 \begin{itemize}
-\item Agent share collected flag
+\item Agents share collected flags
 \item Minimal communication
 \item Clear improvement
-\item Do not reaches joint-plan
-\item Individual plan remain non optimal
+\item Does not reach joint-plan
+\item Individual-plan remains non optimal
 \end{itemize}
 \end{block}
 \end{column}
@@ -392,7 +400,7 @@ not\ on\ goal = 0
 \item Individual-plans leads to conflicted knowledge
 \item Posterior cooperation is not sufficient to overcome it
 \item Transforming the plan to avoid conflict works
-$\rightarrow$ Is it possible to automatize it ?
+$\rightarrow$ Is it possible to automate it ?
 \end{itemize}
 \end{block}
 
@@ -402,7 +410,7 @@ $\rightarrow$ Is it possible to automatize it ?
 
 \begin{block}{Other work}
 \begin{itemize}
-\item Exploration can overcome conflict knowledge but need more episodes
+\item Exploration can overcome conflict knowledge but needs more episodes
 \item Abstract-MDP reward shaping
 \end{itemize}
 \end{block}
@@ -416,7 +424,7 @@ $\rightarrow$ Is it possible to automatize it ?
 \hspace*{.1\linewidth}\begin{minipage}{.8\linewidth}
 \begin{center}
 \begin{exampleblock}{Knowledge revision}
-See conflict knowledge as bad or incomplete knowledge and use knowledge revision\\
+Interpret conflict knowledge as bad or incomplete knowledge and use knowledge revision\\
 $\rightarrow$ Two steps:
 \begin{itemize}
 \item Implement knowledge revision for multi-agent
