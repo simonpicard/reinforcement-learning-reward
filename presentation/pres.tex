@@ -1,5 +1,6 @@
 \documentclass{bredelebeamer}
 
+\setcounter{tocdepth}{1}
 
 \begin{document}
 
@@ -18,32 +19,55 @@ Université Libre de Bruxelles, Boulevard du Triomphe - CP 212, 1050 Brussels, B
 \titlepage % Print the title page as the first slide
 \end{frame}
 
-\begin{frame}{Content}
-\tableofcontents % Throughout your presentation, if you choose to use \section{} and \subsection{} commands, these will automatically be printed on this slide as an overview of your presentation
-\end{frame}
-
 \section{Introduction}
 \begin{frame}{Introduction}
 
-\begin{block}{}
+\begin{columns}[onlytextwidth]
+\begin{column}{0.45\linewidth}
+
+\begin{block}{Field}
 \begin{itemize}
 \item Reinforcement learning
-\item Increase speed through prior knowledge
 \item Multi-agent
+\item Reward shaping
 \item Plan
 \end{itemize}
 \end{block}
 
+\end{column}
+\begin{column}{0.015\linewidth}
+
+\end{column}
+\begin{column}{0.45\linewidth}
+\begin{block}{Content}
+$\ $\\
+\tableofcontents
+$\ $\\
+
+\end{block}
+
+\end{column}
+\end{columns}
+
+\begin{exampleblock}{Aim of the work}
+\begin{itemize}
+\item Is reward shaping efficient ?
+\item Which heuristic is good ?
+\item What happens when combining them ?
+\item Is there a gap between individual-plan and joint-plan ?
+\item Why is there a gap and how to reduce it ?
+\end{itemize}
+\end{exampleblock}
+
 \end{frame}
 
 \section{Materials and Methods}
-\subsection{Reinforcement Learning}
 \begin{frame}{Reinforcement Learning}
 
 \begin{block}{Q-Matrix}
 \begin{itemize}
 \item MDP =  $< S, A, T, R >$
-\item $Q(s, a) \leftarrow  Q(s, a) +  \alpha [r + \gamma Q(s', a') - Q(s,a)]$
+\item SARSA : $Q(s, a) \leftarrow  Q(s, a) +  \alpha [r + \gamma Q(s', a') - Q(s,a)]$
 \item $\alpha$ : learning rate
 \item $r$ : reward
 \item $\gamma$ : discount factor
@@ -61,7 +85,6 @@ Université Libre de Bruxelles, Boulevard du Triomphe - CP 212, 1050 Brussels, B
 \end{frame}
 
 
-\subsection{Plan Based Reward Shaping}
 \begin{frame}{Reward Shaping}
 
 \begin{block}{Basic}
@@ -72,9 +95,16 @@ Université Libre de Bruxelles, Boulevard du Triomphe - CP 212, 1050 Brussels, B
 \end{itemize}
 \end{block}
 
-\begin{columns}
+\begin{columns}[onlytextwidth]
 
-\begin{column}{0.7\linewidth}
+\begin{column}{0.6\linewidth}
+
+\begin{block}{SARSA($\lambda$) with reward shaping}
+\begin{itemize}
+\item $Q(s, a) \leftarrow  Q(s, a) +  \alpha *  \sigma *  (\gamma * \lambda)^t$
+\item $\sigma = r + F(s, s') + \gamma Q(s', a') - Q(s,a)$
+\end{itemize}
+\end{block}
 
 \begin{block}{Plan Based Reward Shaping}
 \begin{itemize}
@@ -86,12 +116,12 @@ Université Libre de Bruxelles, Boulevard du Triomphe - CP 212, 1050 Brussels, B
 
 \end{column}
 
-\begin{column}{0.3\linewidth}
+\begin{column}{0.4\linewidth}
 
 \begin{figure}[h!]
 \centering
   \includegraphics[width = \linewidth]{../article/img/strips.png}
-  \caption{Plan-base reward shaping}
+  %\caption{Plan-base reward shaping}
   \label{fig:strips}
 \end{figure}
 
@@ -117,15 +147,16 @@ Université Libre de Bruxelles, Boulevard du Triomphe - CP 212, 1050 Brussels, B
 \begin{itemize}
 \item $\phi (s) = \omega * CurrentStepInPlan$
 \item $\omega = MaxReward/NumStepsInPlan$
+\item $\omega$: scaling factor
+\item Max shaping reward = max reward
 \end{itemize}
 \end{block}
 
 \end{frame}
 
-\subsection{Study Case}
 \begin{frame}{Problem}
 
-\begin{columns}
+\begin{columns}[t]
 \begin{column}{0.5\linewidth}
 \begin{figure}[h!]
 \centering
@@ -136,7 +167,7 @@ Université Libre de Bruxelles, Boulevard du Triomphe - CP 212, 1050 Brussels, B
 \end{column}
 
 \begin{column}{0.5\linewidth}
-\begin{block}{}
+\begin{block}{Description}
 \begin{itemize}
 \item Two agents
 \item Six flags
@@ -148,6 +179,8 @@ on\ goal =  Flags*100 \\
 not\ on\ goal = 0
 \end{array}
 \right.$
+\item Agent knows its position
+\item Agent knows the flags it collected
 \end{itemize}
 
 
@@ -157,35 +190,53 @@ not\ on\ goal = 0
 \end{columns}
 
 \end{frame}
-\begin{frame}{Potential Function}
-\begin{figure}[h!]
-\centering
-  \includegraphics[height = 0.2\textheight]{../article/img/individualPlan.png}
-  \caption{Individual plan.}
-  \label{fig:plan1}
-\end{figure}
+\begin{frame}{Plan Handling}
 
+\begin{columns}
+\begin{column}{0.4\linewidth}
 \begin{figure}[h!]
 \centering
-  \includegraphics[height = 0.2\textheight]{../article/img/joinPlan.png}
-  \caption{Joint plan.}
+  \includegraphics[width = \linewidth]{../article/img/joinPlanA1.png}
+  \caption{Strips plan}
   \label{fig:plan2}
 \end{figure}
+\end{column}
+
+
+\begin{column}{0.6\linewidth}
+\begin{figure}[h!]
+\centering
+  \includegraphics[width = \linewidth]{../article/img/listingFormattedJoinAgent1.png}
+  \caption{Formatted plan}
+  \label{fig:plan2}
+\end{figure}
+\end{column}
+
+\end{columns}
 
 \begin{block}{}
 \begin{itemize}
-\item 
+\item Action based to state based
+\item Same for other agent and individual plans
 \end{itemize}
 \end{block}
 
 \end{frame}
 
-\begin{frame}{Other Heuristics}
+\begin{frame}{Heuristics}
 
 \begin{block}{Flag-Based}
 \begin{itemize}
 \item $\phi (s) =  NumFlagsCollected*\omega$
 \item $\omega = MaxReward/MaxFlagsInWorld$
+\end{itemize}
+\end{block}
+
+\begin{block}{Plan-Based}
+\begin{itemize}
+\item $\phi (s) =  CurrentStepInPlan*\omega$
+\item $\omega = MaxReward/NumStepsInPlan$
+\item Not in plan $\rightarrow$ last step in plan
 \end{itemize}
 \end{block}
 
@@ -201,90 +252,181 @@ not\ on\ goal = 0
 
 \section{Results and Discussion}
 
-\subsection{Initial Results}
+\begin{frame}{Experiments}
+
+\begin{block}{Modus operandi}
+\begin{itemize}
+\item 2000 episodes
+\item Average over 30 simulations
+\item Value averaged over 100 previous episodes
+\item Discounted total reward over episodes
+\item Discounted total reward = $reward*\gamma^{steps}$
+\end{itemize}
+\end{block}
+
+\end{frame}
+
 \begin{frame}{Initial Results}
 
+\begin{columns}
+
+\begin{column}{0.65\linewidth}
+
 \begin{figure}[h!]
-  \includegraphics[height=0.4\textheight]{../article/img/initial.png}
-  \caption{Initial results.}
+  \includegraphics[width = \linewidth]{../article/img/initial.png}
+  %\caption{Initial results.}
   \label{fig:results1}
 \end{figure}
 
-\begin{block}{}
+\end{column}
+
+
+\begin{column}{0.45\linewidth}
+
+\begin{block}{Analyse}
 \begin{itemize}
-\item 
+\item Lower bond : no shaping
+\item Upper bound : joint-plan shaping
+\item Individual-plan shaping : poor results
+\item Combined with flag-based : add knowledge
 \end{itemize}
 \end{block}
 
+\end{column}
+
+\end{columns}
+
 \end{frame}
 
-\begin{frame}{Conflict Knowledge}
+\begin{frame}{Conflicted Knowledge}
 
 \begin{figure}[h!]
-  \includegraphics[height=0.4\textheight]{../article/img/behavious.png}
-  \caption{Behaviours of :}
+  \includegraphics[width=\linewidth]{../article/img/behavious.png}
+  %\caption{Behaviours of :}
   \label{fig:behave}
 \end{figure}
 
-\end{frame}
-
-\subsection{Improved Knowledge}
-\begin{frame}{Improved Knowledge}
-
-
-\begin{figure}[h!]
-  \includegraphics[height=0.4\textheight]{../article/img/knowledge.png}
-  \caption{Improved knowledge.}
-  \label{fig:results2}
-\end{figure}
-
 \begin{block}{}
 \begin{itemize}
-\item 
+\item Poor behaviour with individual plans
+\item Conflict knowledge
+\item How to avoid it ?
 \end{itemize}
 \end{block}
 
 \end{frame}
 
-\subsection{Improved Cooperation}
+\begin{frame}{Partial Knowledge}
+
+
+
+\begin{columns}
+\begin{column}{0.65\linewidth}
+
+\begin{figure}[h!]
+  \includegraphics[width=\linewidth]{../article/img/knowledge.png}
+  %\caption{Improved knowledge.}
+  \label{fig:results2}
+\end{figure}
+
+\end{column}
+
+\begin{column}{0.45\linewidth}
+\begin{block}{Analyse}
+\begin{itemize}
+\item Delayed conflict
+\item Removed conflict
+\item Significant improvement
+\item Need global knowledge
+\end{itemize}
+\end{block}
+\end{column}
+
+\end{columns}
+
+
+\end{frame}
+
 \begin{frame}{Improved Cooperation}
 
 
+
+\begin{columns}
+\begin{column}{0.65\linewidth}
+
+
 \begin{figure}[h!]
-  \includegraphics[height=0.4\textheight]{../article/img/coop.png}
-  \caption{Improved knowledge.}
+  \includegraphics[width=\linewidth]{../article/img/coop.png}
+  %\caption{Improved knowledge.}
   \label{fig:results2}
 \end{figure}
 
-\begin{block}{}
+\end{column}
+
+\begin{column}{0.45\linewidth}
+
+\begin{block}{Analyse}
 \begin{itemize}
-\item 
+\item Agent share collected flag
+\item Minimal communication
+\item Clear improvement
+\item Do not reaches joint-plan
+\item Individual plan remain non optimal
 \end{itemize}
 \end{block}
+\end{column}
+
+\end{columns}
 
 \end{frame}
 
 
 \section{Conclusion}
 
-\subsection{Discussion}
-\begin{frame}{Discussion}
+\begin{frame}{Conclusion}
 
 \begin{block}{}
 \begin{itemize}
-\item 
+\item Knowledge improves results
+\item Joint-plan is optimal
+\item Individual-plans leads to conflicted knowledge
+\item Posterior cooperation is not sufficient to overcome it
+\item Transforming the plan to avoid conflict works
+$\rightarrow$ Is it possible to automatize it ?
 \end{itemize}
 \end{block}
 
 \end{frame}
 
-\subsection{Future Work}
-\begin{frame}{Future Work}
+\begin{frame}{Other and Future Work}
 
-\begin{block}{}
+\begin{block}{Other work}
 \begin{itemize}
-\item 
+\item Exploration can overcome conflict knowledge but need more episodes
+\item Abstract-MDP reward shaping
 \end{itemize}
+\end{block}
+
+\begin{block}{Future Work}
+\begin{itemize}
+\item Use specific MARL algorithms
+\item Modify potential function according to domain
+\end{itemize}
+
+\hspace*{.1\linewidth}\begin{minipage}{.8\linewidth}
+\begin{center}
+\begin{exampleblock}{Knowledge revision}
+See conflict knowledge as bad or incomplete knowledge and use knowledge revision\\
+$\rightarrow$ Two steps:
+\begin{itemize}
+\item Implement knowledge revision for multi-agent
+\item Experiment it with individual-plans
+\end{itemize}
+\end{exampleblock}
+
+\end{center}
+\end{minipage}
+\medskip
 \end{block}
 
 \end{frame}
