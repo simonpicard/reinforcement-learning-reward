@@ -76,7 +76,7 @@ Université Libre de Bruxelles, Boulevard du Triomphe - CP 212, 1050 Brussels, B
 \item Is reward shaping efficient ?
 \item Which heuristic is good ?
 \item What happens when combining them ?
-\item Is there a gap between individual-plan and joint-plan ?
+\item Is there a gap between individual-plan and joint-plan based reward shaping ?
 \item Why is there a gap and how to reduce it ?
 \end{itemize}
 \end{exampleblock}
@@ -91,7 +91,7 @@ Université Libre de Bruxelles, Boulevard du Triomphe - CP 212, 1050 Brussels, B
 \item MDP =  $< S, A, T, R >$
 \item SARSA : $Q(s, a) \leftarrow  Q(s, a) +  \alpha [r + \gamma Q(s', a') - Q(s,a)]$
 \item $\alpha$ : learning rate
-\item $r$ : reward
+\item $r$  : reward
 \item $\gamma$ : discount factor
 \item $\epsilon$-Greedy
 \end{itemize}
@@ -175,16 +175,67 @@ Université Libre de Bruxelles, Boulevard du Triomphe - CP 212, 1050 Brussels, B
 \end{frame}
 
 
-\begin{frame}
+\begin{frame}{Multi-Agent Planning}
 
-\begin{block}{Multi-Agent Planning}
+\begin{block}{Centralized Planning}
+\vskip-1em
+\begin{columns}[onlytextwidth]
+
+\begin{column}{0.5\textwidth}
+
 \begin{itemize}
-\item How to set the plan
-\item Information sharing
-\item One centralized agent : joint plans
-\item Each agent make its plan : individual plans
+\item Generate global plan
+\item Decompose it
+\item Assign task to multiple agents
+\item Divulge plans and goals
 \end{itemize}
+$\rightarrow$ Joint-plan
+
+\end{column}
+
+
+\begin{column}{0.5\textwidth}
+
+\begin{figure}[h!]
+\centering
+  \includegraphics[height=0.35\textheight]{../article/img/joinrExemple.png}
+  \label{fig:studycase1}
+\end{figure}
+
+\end{column}
+\end{columns}
+
 \end{block}
+
+
+\begin{block}{Decentralized Planning}
+\vskip-1em
+\begin{columns}[onlytextwidth]
+
+\begin{column}{0.5\textwidth}
+
+\begin{itemize}
+\item Each agent set its own plan
+\item Do not divulge plans and goals
+\end{itemize}
+$\rightarrow$ Individual-plan
+
+\end{column}
+\begin{column}{0.5\textwidth}
+
+\begin{figure}[h!]
+\centering
+  \includegraphics[height=0.35\textheight]{../article/img/individualExemple.png}
+  \label{fig:studycase1}
+\end{figure}
+
+\end{column}
+
+\end{columns}
+\end{block}
+
+
+
 
 \end{frame}
 
@@ -215,6 +266,7 @@ not\ on\ goal = 0
 \right.$
 \item Agent knows its position
 \item Agent knows the flags it collected
+\item Episode : start to goal
 \end{itemize}
 
 
@@ -227,21 +279,21 @@ not\ on\ goal = 0
 \begin{frame}{Plan Handling}
 
 \begin{columns}
-\begin{column}{0.4\linewidth}
+\begin{column}{0.6\linewidth}
 \begin{figure}[h!]
 \centering
-  \includegraphics[width = \linewidth]{../article/img/joinPlanA1.png}
-  \caption{Strips plan}
+  \includegraphics[width = \linewidth]{../article/img/listingFormattedJoinAgent1.png}
+  \caption{State based plan}
   \label{fig:plan2}
 \end{figure}
 \end{column}
 
 
-\begin{column}{0.6\linewidth}
+\begin{column}{0.4\linewidth}
 \begin{figure}[h!]
 \centering
-  \includegraphics[width = \linewidth]{../article/img/listingFormattedJoinAgent1.png}
-  \caption{Formatted plan}
+  \includegraphics[width = \linewidth]{../article/img/jointCase.png}
+  \caption{Joint-plan}
   \label{fig:plan2}
 \end{figure}
 \end{column}
@@ -251,7 +303,7 @@ not\ on\ goal = 0
 \begin{block}{}
 \begin{itemize}
 \item Action based to state based
-\item Same for other agent and individual plans
+\item Each agent has an individual-plan and a joint-plan
 \end{itemize}
 \end{block}
 
@@ -298,9 +350,9 @@ not\ on\ goal = 0
 \item $\lambda = 0.4$
 \item 2000 episodes
 \item Average over 30 simulations
-\item Value averaged over 100 previous episodes
 \item Discounted total reward over episodes
 \item Discounted total reward = $reward*\gamma^{steps}$
+\item Value averaged over 100 previous episodes
 
 
 \end{itemize}
@@ -327,10 +379,11 @@ not\ on\ goal = 0
 
 \begin{block}{Analyse}
 \begin{itemize}
-\item Lower bond : no shaping
-\item Upper bound : joint-plan shaping
-\item Individual-plan shaping : poor results
-\item Combined with flag-based : add knowledge
+\item Lower bound : no shaping
+\item Upper bound : joint-plan
+\item Individual-plan : poor results
+\item Flag-based : inefficient path
+\item Plan-based and flag-based : add knowledge
 \end{itemize}
 \end{block}
 
@@ -342,19 +395,50 @@ not\ on\ goal = 0
 
 \begin{frame}{Conflicted Knowledge}
 
+\begin{columns}[onlytextwidth]
+\begin{column}{0.5\linewidth}
+
 \begin{figure}[h!]
-  \includegraphics[width=\linewidth]{../article/img/behavious.png}
+  \includegraphics[height=0.4\textheight]{../article/img/jointCase.png}
   %\caption{Behaviours of :}
   \label{fig:behave}
 \end{figure}
+\end{column}
+
+\begin{column}{0.5\linewidth}
+
+\begin{figure}[h!]
+  \includegraphics[height=0.4\textheight]{../article/img/individualCase.png}
+  %\caption{Behaviours of :}
+  \label{fig:behave}
+\end{figure}
+\end{column}
+
+\end{columns}
+
+\begin{columns}[onlytextwidth]
+\begin{column}{0.45\linewidth}
 
 \begin{alertblock}{}
 \begin{itemize}
 \item Poor behaviour with individual plans
 \item Conflict knowledge
 \item How to avoid it ?
+\item \textbf{Make individual-plan based reward shaping as efficient as the joint-plan one}
 \end{itemize}
 \end{alertblock}
+\end{column}
+
+\begin{column}{0.5\linewidth}
+\hfill
+\begin{figure}[h!]
+  \includegraphics[height=0.4\textheight]{../article/img/conflictCase.png}
+  %\caption{Behaviours of :}
+  \label{fig:behave}
+\end{figure}
+\end{column}
+
+\end{columns}
 
 \end{frame}
 
