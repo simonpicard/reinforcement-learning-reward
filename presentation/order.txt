@@ -1,0 +1,15 @@
+M Introduction
+S Reinforcement Learning
+J Reward Shaping
+J Plan Based Reward shaping
+M Multi-Agent Planing - Multi-Agent, Plan-Based Reward Shaping
+S Problem
+J Plan Handling
+J Heuristics
+M Experiments
+S Initial Results
+S Conflict Knowledge
+J Partial Results
+M Improved Cooperation
+M Conclusion
+S Other and Future Work
