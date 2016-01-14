@@ -2,12 +2,24 @@
 
 \setcounter{tocdepth}{1}
 
+
+
+\newenvironment<>{varblock}[2][.9\textwidth]{%
+  \setlength{\textwidth}{#1}
+  \begin{actionenv}#3%
+    \def\insertblocktitle{#2}%
+    \par%
+    \usebeamertemplate{block begin}}
+  {\par%
+    \usebeamertemplate{block end}%
+  \end{actionenv}}
+
 \begin{document}
 
 \title[PBRS for MARL]{\textbf{Plan-Based Reward Shaping for Multi-Agent Reinforcement Learning} \\INFO-F-409 -- Learning dynamics} % The short title appears at the bottom of every slide, the full title is only on the title page
 
 \author[]{Jérome \textsc{Bastogne}, Maxime \textsc{Desclefs}, Simon \textsc{Picard}}
-\institute[ULB] % Your institution as it will appear on the bottom of every slide, may be shorthand to save space
+\institute[Université Libre de Bruxelles] % Your institution as it will appear on the bottom of every slide, may be shorthand to save space
 {
 Université Libre de Bruxelles, Boulevard du Triomphe - CP 212, 1050 Brussels, Belgium \\ % Your institution for the title page
 \medskip
@@ -15,38 +27,46 @@ Université Libre de Bruxelles, Boulevard du Triomphe - CP 212, 1050 Brussels, B
 }
 \date{January 15 2016} % Date, can be changed to a custom date
 
-\begin{frame}
+\begin{frame}[noframenumbering]
 \titlepage % Print the title page as the first slide
 \end{frame}
 
 \section{Introduction}
 \begin{frame}{Introduction}
 
-\begin{columns}[onlytextwidth]
-\begin{column}{0.45\linewidth}
+\begin{columns}[totalwidth=\textwidth]
+\begin{column}{0.5\linewidth}
 
 
-\begin{block}{Content}
-$\ $\\
+\begin{varblock}[0.95\textwidth]{Content}
+
+\begin{minipage}[t][1.8cm][t]{\linewidth}
+%$\ $\\
 \tableofcontents
-$\ $\\
 
-\end{block}
+\end{minipage}
+\end{varblock}
+
+
 
 \end{column}
-\begin{column}{0.015\linewidth}
+\begin{column}{0.0251\linewidth}
+
 
 \end{column}
-\begin{column}{0.45\linewidth}
+\begin{column}{0.5\linewidth}
 
-\begin{block}{Field}
+\begin{varblock}[0.95\textwidth]{Field \phantom{Content}}
+\begin{minipage}[t][1.8cm][t]{\linewidth}
 \begin{itemize}
 \item Reinforcement learning
 \item Multi-agent
 \item Reward shaping
 \item Plan
 \end{itemize}
-\end{block}
+\end{minipage}
+\end{varblock}
+
 
 \end{column}
 \end{columns}
@@ -97,10 +117,6 @@ $\ $\\
 \end{itemize}
 \end{block}
 
-\begin{columns}[onlytextwidth]
-
-\begin{column}{0.6\linewidth}
-
 \begin{block}{SARSA($\lambda$) with reward shaping}
 \begin{itemize}
 \item $Q(s, a) \leftarrow  Q(s, a) +  \alpha *  \sigma *  (\gamma * \lambda)^t$
@@ -108,17 +124,15 @@ $\ $\\
 \end{itemize}
 \end{block}
 
-\begin{block}{Plan Based Reward Shaping}
-\begin{itemize}
-\item Set of subgoals
-\item To be followed in order
-\item Proportional to the step in the plan
-\end{itemize}
-\end{block}
 
-\end{column}
+\end{frame}
 
-\begin{column}{0.4\linewidth}
+
+\begin{frame}{Plan Based Reward Shaping}
+
+\begin{columns}
+
+\begin{column}{0.6\linewidth}
 
 \begin{figure}[h!]
 \centering
@@ -129,7 +143,22 @@ $\ $\\
 
 \end{column}
 
+\begin{column}{0.4\linewidth}
+
+\begin{block}{Main idea}
+\begin{itemize}
+\item Plan: set of subgoals
+\item Subgoals: state of agent\\$\rightarrow$ domain specific
+\item To be followed
+\item Reward proportional to the distance of the step in the plan
+\end{itemize}
+\end{block}
+
+\end{column}
+
 \end{columns}
+
+
 
 \end{frame}
 
@@ -150,7 +179,7 @@ $\ $\\
 \item $\phi (s) = \omega * CurrentStepInPlan$
 \item $\omega = MaxReward/NumStepsInPlan$
 \item $\omega$: scaling factor
-\item Max shaping reward = max reward
+\item Max shaping reward = maxd domain reward
 \end{itemize}
 \end{block}
 
