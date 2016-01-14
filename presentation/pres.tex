@@ -85,24 +85,55 @@ Université Libre de Bruxelles, Boulevard du Triomphe - CP 212, 1050 Brussels, B
 
 \section{Materials and Methods}
 \begin{frame}{Reinforcement Learning}
-
-\begin{block}{Q-Matrix}
+\begin{columns}
+\begin{column}{0.5\textwidth}
 \begin{itemize}
-\item MDP =  $< S, A, T, R >$
-\item SARSA : $Q(s, a) \leftarrow  Q(s, a) +  \alpha [r + \gamma Q(s', a') - Q(s,a)]$
-\item $\alpha$ : learning rate
-\item $r$  : reward
-\item $\gamma$ : discount factor
-\item $\epsilon$-Greedy
+
+\item Machine learning
+\item Goal directed
+\item Environment
+\item Agent
+\end{itemize}
+\end{column}
+
+\begin{column}{0.5\textwidth}
+\begin{itemize}
+
+\item Given actions
+\item Reward
+\item Repeated experiences
+\item Exploration $\rightarrow$ $\epsilon$-Greedy
+\end{itemize}
+\end{column}
+\end{columns}
+
+\begin{block}{MDP and Algorithm}
+\begin{itemize}
+\item MDP =  $< S, A, T, R >$ \quad Markov Property
+\item Temporal Difference Algorithm : $Q(s, a) \leftarrow  Q(s, a) +  \alpha [r + \gamma Q(s', a') - Q(s,a)]$
+\item $r$  : reward \hfill $\alpha$ : learning rate \hfill $\gamma$ : discount factor \hfill
 \end{itemize}
 \end{block}
 
 \begin{block}{Eligibility traces}
+\begin{columns}
+\begin{column}{0.5\textwidth}
 \begin{itemize}
-\item For current $(s,a)$ : $\sigma = r + \gamma Q(s', a') - Q(s,a)$
-\item For all $(s,a)$ in path : $Q(s, a) \leftarrow  Q(s, a) +  \alpha *  \sigma *  (\gamma * \lambda)^t$
-\item $\lambda$ : eligibility factor
+\item For current $(s,a)$:\\\  $\sigma = r + \gamma Q(s', a') - Q(s,a)$
+\item For all $(s,a)$ in path:\\\  $Q(s, a) \leftarrow  Q(s, a) +  \alpha *  \sigma *  (\gamma * \lambda)^t$
+\item $\lambda$ : decay rate
 \end{itemize}
+\end{column}
+\begin{column}{0.5\textwidth}
+
+\begin{figure}[h!]
+\hskip-0.7cm
+  \includegraphics[width = \linewidth]{../article/img/sarsaET.png}
+  %\caption{Plan-base reward shaping}
+  \label{fig:strips}
+\end{figure}
+\end{column}
+\end{columns}
 \end{block}
 
 \end{frame}
@@ -348,6 +379,7 @@ not\ on\ goal = 0
 \item $\gamma = 0.99$
 \item $\epsilon = 0.1$ 
 \item $\lambda = 0.4$
+\item Q-values initialized to 0
 \item 2000 episodes
 \item Average over 30 simulations
 \item Discounted total reward over episodes
@@ -377,7 +409,7 @@ not\ on\ goal = 0
 
 \begin{column}{0.45\linewidth}
 
-\begin{block}{Analyse}
+\begin{block}{Analysis}
 \begin{itemize}
 \item Lower bound : no shaping
 \item Upper bound : joint-plan
@@ -458,7 +490,7 @@ not\ on\ goal = 0
 \end{column}
 
 \begin{column}{0.45\linewidth}
-\begin{block}{Analyse}
+\begin{block}{Explanation and Analysis}
 \begin{itemize}
 \item Delayed conflict
 \item Removed conflict
@@ -491,7 +523,7 @@ not\ on\ goal = 0
 
 \begin{column}{0.45\linewidth}
 
-\begin{block}{Analyse}
+\begin{block}{Explanation and Analysis}
 \begin{itemize}
 \item Agents share collected flags
 \item Minimal communication
