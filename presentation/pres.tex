@@ -93,13 +93,14 @@ Université Libre de Bruxelles, Boulevard du Triomphe - CP 212, 1050 Brussels, B
 \item $\alpha$ : learning rate
 \item $r$ : reward
 \item $\gamma$ : discount factor
+\item $\epsilon$-Greedy
 \end{itemize}
 \end{block}
 
 \begin{block}{Eligibility traces}
 \begin{itemize}
-\item $Q(s, a) \leftarrow  Q(s, a) +  \alpha *  \sigma *  (\gamma * \lambda)^t$
-\item $\sigma = r + \gamma Q(s', a') - Q(s,a)$
+\item For current $(s,a)$ : $\sigma = r + \gamma Q(s', a') - Q(s,a)$
+\item For all $(s,a)$ in path : $Q(s, a) \leftarrow  Q(s, a) +  \alpha *  \sigma *  (\gamma * \lambda)^t$
 \item $\lambda$ : eligibility factor
 \end{itemize}
 \end{block}
@@ -111,6 +112,8 @@ Université Libre de Bruxelles, Boulevard du Triomphe - CP 212, 1050 Brussels, B
 
 \begin{block}{Basic}
 \begin{itemize}
+\item Prior knowledge
+\item Better results
 \item $Q(s, a) \leftarrow  Q(s, a) +  \alpha [r + F(s, s') + \gamma Q(s', a') - Q(s,a)]$
 \item $F(s, s') =\gamma \phi (s') - \phi (s)$
 \item Potential function over a state
@@ -119,8 +122,8 @@ Université Libre de Bruxelles, Boulevard du Triomphe - CP 212, 1050 Brussels, B
 
 \begin{block}{SARSA($\lambda$) with reward shaping}
 \begin{itemize}
-\item $Q(s, a) \leftarrow  Q(s, a) +  \alpha *  \sigma *  (\gamma * \lambda)^t$
-\item $\sigma = r + F(s, s') + \gamma Q(s', a') - Q(s,a)$
+\item For current $(s,a)$ : $\sigma = r + F(s, s') + \gamma Q(s', a') - Q(s,a)$
+\item For all $(s,a)$ in path : $Q(s, a) \leftarrow  Q(s, a) +  \alpha *  \sigma *  (\gamma * \lambda)^t$
 \end{itemize}
 \end{block}
 
@@ -132,7 +135,7 @@ Université Libre de Bruxelles, Boulevard du Triomphe - CP 212, 1050 Brussels, B
 
 \begin{columns}
 
-\begin{column}{0.6\linewidth}
+\begin{column}{0.5\linewidth}
 
 \begin{figure}[h!]
 \centering
@@ -143,14 +146,23 @@ Université Libre de Bruxelles, Boulevard du Triomphe - CP 212, 1050 Brussels, B
 
 \end{column}
 
-\begin{column}{0.4\linewidth}
+\begin{column}{0.5\linewidth}
 
 \begin{block}{Main idea}
 \begin{itemize}
 \item Plan: set of subgoals
-\item Subgoals: state of agent\\$\rightarrow$ domain specific
+\item Subgoals: state of the agent\\$\rightarrow$ domain specific
 \item To be followed
 \item Reward proportional to the distance of the step in the plan
+\end{itemize}
+\end{block}
+
+\begin{block}{Potential Function}
+\begin{itemize}
+\item $\phi (s) = \omega * CurrentStepInPlan$
+\item $\omega$ : scaling factor
+\item $\omega = MaxReward/NumStepsInPlan$
+\item Max shaping reward = max domain reward
 \end{itemize}
 \end{block}
 
@@ -171,15 +183,6 @@ Université Libre de Bruxelles, Boulevard du Triomphe - CP 212, 1050 Brussels, B
 \item Information sharing
 \item One centralized agent : joint plans
 \item Each agent make its plan : individual plans
-\end{itemize}
-\end{block}
-
-\begin{block}{Multi-Agent, Plan-Based Reward Shaping}
-\begin{itemize}
-\item $\phi (s) = \omega * CurrentStepInPlan$
-\item $\omega = MaxReward/NumStepsInPlan$
-\item $\omega$: scaling factor
-\item Max shaping reward = maxd domain reward
 \end{itemize}
 \end{block}
 
@@ -288,8 +291,10 @@ not\ on\ goal = 0
 \begin{block}{Modus operandi}
 \begin{itemize}
 \item SARSA($\lambda$)
+\item $\epsilon$-Greedy
 \item $\alpha = 0.1$
 \item $\gamma = 0.99$
+\item $\epsilon = 0.1$ 
 \item $\lambda = 0.4$
 \item 2000 episodes
 \item Average over 30 simulations
