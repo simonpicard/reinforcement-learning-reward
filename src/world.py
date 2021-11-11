@@ -8,18 +8,25 @@ class World:
         self.flagsNames = flagsNames
         self.roomsNames = roomsNames
 
-        self.moves = [[0, -1], [1, 0], [0, 1], [-1, 0]] #x y N E S O
+        self.moves = [[0, -1], [1, 0], [0, 1], [-1, 0]]  # x y N E S O
 
     def canMoveAvoid(self, pos, posToAvoid):
         x = pos[0]
         y = pos[1]
         availablePoses = []
         availableMoves = []
-        potentialPoses = [[x+self.moves[i][0], y+self.moves[i][1]] for i in range(4)]
+        potentialPoses = [
+            [x + self.moves[i][0], y + self.moves[i][1]] for i in range(4)
+        ]
         potentialMoves = range(4)
 
         for i in range(len(potentialPoses)):
-            if potentialPoses[i][0] >= 0 and potentialPoses[i][1] >= 0 and potentialPoses[i][0] < self.size[0] and potentialPoses[i][1] < self.size[1]:
+            if (
+                potentialPoses[i][0] >= 0
+                and potentialPoses[i][1] >= 0
+                and potentialPoses[i][0] < self.size[0]
+                and potentialPoses[i][1] < self.size[1]
+            ):
 
                 if self.isInSameRoom([x, y], potentialPoses[i]):
                     availableMoves.append(potentialMoves[i])
@@ -42,11 +49,18 @@ class World:
         y = pos[1]
         availablePoses = []
         availableMoves = []
-        potentialPoses = [[x+self.moves[i][0], y+self.moves[i][1]] for i in range(4)]
+        potentialPoses = [
+            [x + self.moves[i][0], y + self.moves[i][1]] for i in range(4)
+        ]
         potentialMoves = range(4)
 
         for i in range(len(potentialPoses)):
-            if potentialPoses[i][0] >= 0 and potentialPoses[i][1] >= 0 and potentialPoses[i][0] < self.size[0] and potentialPoses[i][1] < self.size[1]:
+            if (
+                potentialPoses[i][0] >= 0
+                and potentialPoses[i][1] >= 0
+                and potentialPoses[i][0] < self.size[0]
+                and potentialPoses[i][1] < self.size[1]
+            ):
 
                 if self.isInSameRoom([x, y], potentialPoses[i]):
                     availableMoves.append(potentialMoves[i])
@@ -68,7 +82,7 @@ class World:
         return availableMoves
 
     def hasDoor(self, coord1, coord2):
-        return (coord1+coord2) in self.doors or (coord2+coord1) in self.doors
+        return (coord1 + coord2) in self.doors or (coord2 + coord1) in self.doors
 
     def isInSameRoom(self, coord1, coord2):
         return self.world[coord1[1]][coord1[0]] == self.world[coord2[1]][coord2[0]]
